@@ -1,0 +1,28 @@
+# Archivos auxiliares de LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.bbl
+*.blg
+*.nav
+*.snm
+*.vrb
+*.xdv
+_minted*/
+
+# Código
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.o
+*.out.exe
+
+# Sistema
+.DS_Store
