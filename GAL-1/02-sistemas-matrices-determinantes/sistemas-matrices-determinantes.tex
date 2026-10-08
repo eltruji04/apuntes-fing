@@ -1,0 +1,1258 @@
+% =====================================================================
+%  sistemas-matrices-determinantes.tex — Unidad: Sistemas lineales, matrices y determinantes
+%  Requiere apuntes.sty (estilo/ en la raíz del repo; ver README).
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+\usepackage{apuntes}
+
+% ---------- Macros propias de esta materia (solo si hacen falta) ----------
+\usetikzlibrary{matrix}
+\newcommand{\M}{\mathcal{M}}
+\DeclareMathOperator{\Sol}{Sol}
+\DeclareMathOperator{\cof}{cof}
+
+% ---------- Metadatos ----------
+\materia{GAL 1}
+\curso{Teórico}
+\unidad{Sistemas, matrices y determinantes}
+\periodo{Clases 2 a 12 --- 2026}
+\hypersetup{pdfauthor={Santiago Trujillo}}
+
+\begin{document}
+\maketitle
+\vspace{-1.6em}
+\begin{center}
+  {\normalsize Santiago Trujillo\par}
+\end{center}
+\vspace{0.5em}
+\tableofcontents
+
+% =====================================================================
+%  CLASES — cada clase nueva se agrega AL FINAL, sin tocar las anteriores
+% =====================================================================
+
+\clase{2}{}{Sistemas de ecuaciones lineales}
+
+\subsection{Sistema de ecuaciones}
+
+Llamamos sistema lineal de $m$ ecuaciones con $n$ incógnitas a toda expresión de la forma:
+\[
+\begin{cases}
+a_{11}x_1+a_{12}x_2+\dots+a_{1n}x_n=b_1\\
+a_{21}x_1+a_{22}x_2+\dots+a_{2n}x_n=b_2\\
+\qquad\vdots\\
+a_{m1}x_1+\dots\dots\dots\dots+a_{mn}x_n=b_m
+\end{cases}
+\qquad a_{ij},b_i\in\C
+\]
+
+\begin{definicion}
+Sean I y II sistemas de ecuaciones (lineales) de $n$ incógnitas. Decimos que I y II son equivalentes si tienen el mismo conjunto solución.
+\end{definicion}
+
+\begin{definicion}
+Llamamos operaciones elementales a:
+\begin{enumerate}[label=\arabic*)]
+  \item Intercambiar filas.
+  \item Multiplicar a una fila por un número diferente de $0$.
+  \item A una fila sumarle una combinación lineal de los restantes.
+\end{enumerate}
+\end{definicion}
+
+% =====================================================================
+\clase{3}{}{Operaciones elementales}
+
+\subsection{Operaciones elementales}
+
+\begin{enumerate}[label=\arabic*)]
+  \item Intercambio de filas: $F_i\leftrightarrow F_j$
+  \item Multiplicar una fila por un número $\alpha\neq0$, $F_i\leftarrow\alpha\cdot F_i$
+  \item A una fila sumarle una combinación lineal de otras $F_i\leftarrow F_i+\sum_{j\neq i}\alpha_jF_j$
+\end{enumerate}
+
+\begin{teorema}
+Si el sistema lineal de ecuaciones II se obtiene del s.l.e.\ I entonces II es equivalente con I ($S_{\text{II}}=S_{\text{I}}$).
+\end{teorema}
+
+Vamos a ver a qué tipo de sistema queremos llegar aplicando operaciones elementales (sistema escalerizado).
+
+Hay estas posibilidades:
+\[
+\text{I}\;\begin{cases}
+2x+3y+5z=1\\
+\phantom{2x+3}y\phantom{+5z}=2\\
+\phantom{2x+3y+}3z=5
+\end{cases}\quad \#S=1\quad\text{S.C.D.}
+\qquad\qquad
+\text{II}\;\begin{cases}
+2x+y+z=1\\
+\phantom{2x+y+}4z=1
+\end{cases}\quad \#S=\infty\quad\text{S.C.I.}
+\]
+\begin{center}
+$\displaystyle
+\text{III}\;\begin{cases}
+10x+3y+4z=1\\
+\phantom{10x+3y+4}z=2
+\end{cases}\quad\text{S.C.I.}
+\qquad\qquad
+\text{IV}\;\begin{cases}
+10x+3y+4z=1\\
+\phantom{10x+3}2y\phantom{+4z}=2\\
+\phantom{10x+3y+}0z=5
+\end{cases}\quad\text{S.I.}$
+\end{center}
+% DUDA: pág. 6 del escaneo, el coeficiente de x en III y IV puede ser 10x o 0x.
+
+% =====================================================================
+\clase{6}{}{Suma y producto de matrices}
+
+\subsection{Álgebra de matrices}
+
+\begin{definicion}[Matriz]
+Dados enteros $m,n\geq1$ se llama matriz de tamaño $m\times n$ a toda función
+\[
+A:[1..m]\times[1..n]\longrightarrow\R
+\]
+\[
+A=(a_{ij})=\begin{pmatrix}
+a_{1,1} & a_{1,2} & \cdots & a_{1,n}\\
+a_{2,1} & a_{2,2} & \cdots & a_{2,n}\\
+\vdots & \vdots & & \vdots\\
+a_{m,1} & a_{m,2} & \cdots & a_{m,n}
+\end{pmatrix}
+\]
+\end{definicion}
+
+El conjunto de las matrices de tamaño $m\times n$ se escribe $\M_{m\times n}$.
+
+\begin{observacion}
+Se pueden considerar matrices con coeficientes en cualquier cuerpo $\K$ ($\K=\Q,\R$, o $\C$).
+\end{observacion}
+
+\begin{notacion}
+$\M_{m\times n}(\K)$
+\end{notacion}
+
+\subsection{Suma de matrices}
+
+\begin{definicion}
+Dadas dos matrices $A=(a_{ij})$ y $B=(b_{ij})$ de mismo tamaño $m\times n$, se define la suma $A+B$ como la matriz $(c_{ij})$ dado por:
+\[
+c_{i,j}=a_{i,j}+b_{i,j}\qquad(\text{para todos } i\in[1..m],\ j\in[1..n])
+\]
+\end{definicion}
+
+\begin{ejemplo}
+\[
+\begin{pmatrix}1&2\\0&\pi\\-3&5\end{pmatrix}+
+\begin{pmatrix}0&9\\5&-4\\2&\sqrt2\end{pmatrix}=
+\begin{pmatrix}1&11\\5&\pi-4\\-1&5+\sqrt2\end{pmatrix}
+\]
+\end{ejemplo}
+
+Propiedades: La operación $(+):\M_{m\times n}\times\M_{m\times n}\longrightarrow\M_{m\times n}$ es asociativa y conmutativa:
+\begin{enumerate}[label=(\arabic*)]
+  \item $(A+B)+C=A+(B+C)$
+  \item $A+B=B+A$
+\end{enumerate}
+Tiene elemento neutro: la matriz nula $O_{m\times n}$, y toda matriz tiene una matriz opuesta $-A=(-a_{ij})$
+\begin{enumerate}[label=(\arabic*),start=3]
+  \item $A+O=O+A=A$
+  \item $A+(-A)=(-A)+A=O$
+\end{enumerate}
+
+\subsection{Producto de números por matrices}
+
+\begin{definicion}
+Dados un número $\lambda\in\R$ y una matriz $A=(a_{ij})$ de tamaño $m\times n$, se define la matriz $\lambda\cdot A$ como la matriz $C=(c_{ij})$ definida por:
+\[
+c_{ij}=\lambda\,a_{ij}\qquad(\text{para todos } i\in[1..m],\ j\in[1..n])
+\]
+\end{definicion}
+
+\begin{ejemplo}
+$\lambda=\sqrt2$ y $A=\begin{pmatrix}\sqrt2&1\\0&-\sqrt2\end{pmatrix}$.
+Entonces $\lambda\cdot A=\begin{pmatrix}2&\sqrt2\\0&-2\end{pmatrix}$.
+\end{ejemplo}
+
+Propiedades: La operación $(\cdot):\R\times\M_{m\times n}\longrightarrow\M_{m\times n}$ cumple las siguientes igualdades:
+\begin{enumerate}[label=(\arabic*)]
+  \item $0\cdot A=O$
+  \item $1\cdot A=A$
+  \item $(-1)\cdot A=-A$
+  \item $(\lambda\mu)\cdot A=\lambda\cdot(\mu\cdot A)$
+  \item $(\lambda+\mu)\cdot A=\lambda\cdot A+\mu\cdot A$
+  \item $\lambda\cdot(A+B)=\lambda\cdot A+\lambda\cdot B$
+\end{enumerate}
+
+\begin{observacion}
+Combinando (5) y (6) se deduce
+\begin{enumerate}[label=(\arabic*),start=7]
+  \item $(\lambda+\mu)\cdot(A+B)=\lambda\cdot A+\lambda\cdot B+\mu\cdot A+\mu\cdot B$
+\end{enumerate}
+\end{observacion}
+
+\subsection{Producto de matrices}
+
+\begin{definicion}
+Dadas matrices
+\begin{itemize}
+  \item $A=(a_{ij})$ de tamaño $m\times p$
+  \item $B=(b_{ij})$ de tamaño $p\times n$
+\end{itemize}
+se define el producto $AB$ como la matriz $(c_{ij})$ de tamaño $m\times n$ definida por:
+\[
+c_{ij}=\sum_{k=1}^{p}a_{i,k}\cdot b_{k,j}\qquad(\text{para todos } i\in[1..m],\ j\in[1..n])
+\]
+\end{definicion}
+
+¡Ojo! Sólo se pueden multiplicar $AB$ cuando $\#\operatorname{col}(A)=\#\operatorname{filas}(B)$, y tenemos que
+\[
+\#\operatorname{filas}(AB)=\#\operatorname{filas}(A),\qquad
+\#\operatorname{col}(AB)=\#\operatorname{col}(B)
+\]
+
+\[
+A=(a_{ij})\in\M_{m\times p},\qquad B=(b_{ij})\in\M_{p\times n}
+\]
+\begin{center}
+\begin{tikzpicture}
+  \matrix (B) at (5.2,3.1) [matrix of math nodes,left delimiter=(,right delimiter=),
+    column sep=6pt,row sep=1pt,nodes in empty cells]
+    {b_{11} & b_{1j} & b_{1n}\\ b_{21} & b_{2j} & b_{2n}\\ \vdots & \vdots & \vdots\\ b_{p1} & b_{pj} & b_{pn}\\};
+  \matrix (A) at (0,0) [matrix of math nodes,left delimiter=(,right delimiter=),
+    column sep=4pt,row sep=4pt]
+    {a_{11} & a_{12} & \cdots & a_{1p}\\ a_{i1} & a_{i2} & \cdots & a_{ip}\\ a_{m1} & a_{m2} & \cdots & a_{mp}\\};
+  \matrix (C) at (5.2,0) [matrix of math nodes,left delimiter=(,right delimiter=),
+    column sep=14pt,row sep=4pt,nodes in empty cells]
+    { & \vdots & \\ \cdots & |[draw]| c_{ij} & \\ & & \\};
+  \draw[decorate,decoration={brace,amplitude=5pt,mirror}] ($(A.south west)+(0.1,-0.1)$) -- ($(A.south east)+(-0.1,-0.1)$) node[midway,below=5pt] {$p$ col};
+  \draw[decorate,decoration={brace,amplitude=5pt}] ($(B.south west)+(-0.35,0)$) -- ($(B.north west)+(-0.35,0)$) node[midway,left=5pt] {$p$ filas};
+  \draw[decorate,decoration={brace,amplitude=5pt}] ($(C.north east)+(0.2,0)$) -- ($(C.south east)+(0.2,0)$) node[midway,right=5pt] {$m$ filas};
+  \draw[decorate,decoration={brace,amplitude=5pt,mirror}] ($(C.south west)+(0.1,-0.1)$) -- ($(C.south east)+(-0.1,-0.1)$) node[midway,below=5pt] {$n$ columnas};
+\end{tikzpicture}
+\end{center}
+
+\begin{ejemplo}
+$A=\begin{pmatrix}2&-1\\0&2\end{pmatrix}$, \quad $B=\begin{pmatrix}3&1\\-2&6\end{pmatrix}$
+\[
+AB=\begin{pmatrix}8&-4\\-4&12\end{pmatrix}\qquad\qquad
+BA=\begin{pmatrix}6&-1\\-4&14\end{pmatrix}
+\]
+\end{ejemplo}
+
+\begin{ejemplo}
+$A=\begin{pmatrix}2&-1&4&0\\0&2&1&5\end{pmatrix}$, \quad
+$B=\begin{pmatrix}1&2\\2&1\\1&1\\1&0\end{pmatrix}$
+\[
+AB=\begin{pmatrix}4&7\\10&3\end{pmatrix}\qquad\qquad
+BA=\begin{pmatrix}2&3&6&10\\4&0&9&5\\2&1&5&5\\2&-1&4&0\end{pmatrix}
+\]
+\end{ejemplo}
+
+\underline{Suma}: $\M_{m\times n}\times\M_{m\times n}\longrightarrow\M_{m\times n}$\\
+$m\cdot n$ sumas elementales ($n^2$ si $m=n$)
+
+\underline{Producto por un número}: $\R\times\M_{m\times n}\longrightarrow\M_{m\times n}$\\
+$m\cdot n$ productos elementales ($n^2$ si $m=n$)
+
+\underline{Producto de matrices}: $(\times):\M_{m\times p}\times\M_{p\times n}\longrightarrow\M_{m\times n}$\\
+$m\cdot n\cdot p$ productos elementales\\
+$m\cdot n\cdot(p-1)$ sumas elementales\\
+($n^3$ productos $+\ n^2(n-1)$ sumas cuando $n=m=p$)
+
+\begin{ejemplo}
+Sea el sistema:
+\[
+(S)\;\begin{cases}
+2x+4y+2z=-2\\
+x+y+2z=0\\
+-x+y-4z=2
+\end{cases}
+\]
+Sean:
+\[
+A=\begin{pmatrix}2&4&2\\1&1&2\\-1&1&-4\end{pmatrix},\qquad
+B=\begin{pmatrix}-2\\0\\2\end{pmatrix},\qquad
+X=\begin{pmatrix}x\\y\\z\end{pmatrix}
+\]
+\[
+AX=\begin{pmatrix}2x+4y+2z\\x+y+2z\\-x+y-4z\end{pmatrix}
+\]
+El sistema es equivalente a: $AX=B$.
+\end{ejemplo}
+
+Propiedades:
+\begin{enumerate}[label=(\arabic*)]
+  \item $(AB)C=A(BC)$
+  \item $(A+B)C=AC+BC$
+  \item $C(A+B)=CA+CB$
+  \item $AO=O$ y $OA=O$
+  \item $\lambda\cdot(AB)=(\lambda\cdot A)B=A(\lambda\cdot B)$
+\end{enumerate}
+
+% =====================================================================
+\clase{7}{}{Transpuesta y matriz inversa}
+
+\subsection{Álgebra de matrices}
+
+\begin{observacion}
+Productos por columnas y por filas
+\begin{enumerate}[label=(\arabic*)]
+  \item matriz $\times$ columna $=$ columna
+  \item fila $\times$ matriz $=$ fila
+\end{enumerate}
+\end{observacion}
+
+\begin{observacion}
+Producto por bloques. Supongamos que $A=m\times p$, $B=p\times n$,
+\[
+m=m_1+m_2,\qquad p=p_1+p_2,\qquad n=n_1+n_2
+\]
+\begin{center}
+\begin{tikzpicture}[scale=1.25]
+  % B
+  \draw (2.5,2.5) rectangle (5,5);
+  \draw (3.75,2.5) -- (3.75,5); \draw (2.5,3.75) -- (5,3.75);
+  \node at (3.125,4.375) {$B_{1,1}$}; \node at (4.375,4.375) {$B_{1,2}$};
+  \node at (3.125,3.125) {$B_{2,1}$}; \node at (4.375,3.125) {$B_{2,2}$};
+  \node at (3.125,5.25) {$n_1$}; \node at (4.375,5.25) {$n_2$};
+  \node at (2.25,4.375) {$p_1$}; \node at (2.25,3.125) {$p_2$};
+  % A
+  \draw (0,0) rectangle (2.5,2.5);
+  \draw (1.25,0) -- (1.25,2.5); \draw (0,1.25) -- (2.5,1.25);
+  \node at (0.625,1.875) {$A_{1,1}$}; \node at (1.875,1.875) {$A_{1,2}$};
+  \node at (0.625,0.625) {$A_{2,1}$}; \node at (1.875,0.625) {$A_{2,2}$};
+  \node at (0.625,2.75) {$p_1$}; \node at (1.875,2.75) {$p_2$};
+  \node at (-0.3,1.875) {$m_1$}; \node at (-0.3,0.625) {$m_2$};
+  \node at (-0.9,1.25) {$A=$};
+  % C
+  \draw (2.5,0) rectangle (5,2.5);
+  \draw (3.75,0) -- (3.75,2.5); \draw (2.5,1.25) -- (5,1.25);
+  \node[align=center,font=\scriptsize] at (3.125,1.875) {$A_{1,1}B_{1,1}+$\\$A_{1,2}B_{2,1}$};
+  \node at (5.35,1.875) {$m_1$}; \node at (5.35,0.625) {$m_2$};
+  \draw[decorate,decoration={brace,amplitude=4pt}] (5.7,2.5) -- (5.7,0) node[midway,right=4pt] {$m$};
+  \node at (3.125,-0.25) {$n_1$}; \node at (4.375,-0.25) {$n_2$};
+  \draw[decorate,decoration={brace,amplitude=4pt,mirror}] (2.5,-0.5) -- (5,-0.5) node[midway,below=4pt] {$n$};
+  \node[right] at (7,2.5) {$\displaystyle C_{i,j}=\sum_{k=1}^{2}A_{i,k}B_{k,j}$};
+\end{tikzpicture}
+\end{center}
+\end{observacion}
+
+\begin{ejemplo}
+$A,B\in\M_{n\times n}$
+\begin{align*}
+(A+B)^2&=(A+B)(A+B)\\
+&=A(A+B)+B(A+B)\\
+&=A^2+AB+BA+B^2
+\end{align*}
+\[
+(A-B)^2=A^2-AB-BA+B^2
+\]
+\[
+(A+B)(A-B)=A^2-AB+BA-B^2
+\]
+\end{ejemplo}
+
+\subsection{Matriz transpuesta}
+
+\begin{definicion}
+Dada una matriz $A=(a_{ij})\in\M_{m\times n}$ se llama transpuesta de $A$ a la matriz $A^t=(a'_{ij})\in\M_{n\times m}$ definida por:
+\[
+a'_{i,j}=a_{j,i}\qquad\text{para todos } i\in[1..n],\ j\in[1..m]
+\]
+\end{definicion}
+
+\begin{ejemplo}
+\[
+\begin{pmatrix}3&0&1\\\sqrt2&\pi&-5\end{pmatrix}^t=\begin{pmatrix}3&\sqrt2\\0&\pi\\1&-5\end{pmatrix}
+\]
+\end{ejemplo}
+
+Propiedades
+\begin{enumerate}[label=(\arabic*)]
+  \item $(A+B)^t=A^t+B^t$, \quad $O_{m\times n}^t=O_{n\times m}$, \quad $(-A)^t=-(A^t)$
+  \item $(\lambda\cdot A)^t=\lambda\cdot(A^t)$
+  \item $(AB)^t=B^tA^t$
+  \item $(A^t)^t=A$
+\end{enumerate}
+
+Vocabulario: Una matriz cuadrada $A\in\M_{n\times n}$ es:
+\begin{itemize}
+  \item Simétrica cuando $A^t=A$ $\longrightarrow\begin{pmatrix}1&3\\3&2\end{pmatrix}$
+  \item antisimétrica cuando $A^t=-A$ $\longrightarrow\begin{pmatrix}0&5\\-5&0\end{pmatrix}$
+\end{itemize}
+
+\begin{ejercicio}
+Mostrar que toda matriz cuadrada $A\in\M_{n\times n}$ se puede escribir $A=A_1+A_2$ donde $A_1$ es simétrica y $A_2$ es antisimétrica.
+
+Sugerencia: tomar
+\[
+A_1=\tfrac12(A+A^t),\qquad A_2=\tfrac12(A-A^t),\qquad A_1+A_2=A
+\]
+\end{ejercicio}
+
+\subsection{Ecuaciones matriciales. Matriz inversa}
+
+\begin{proposicion}
+Cada sistema lineal
+\[
+(S)\;\begin{cases}
+a_{1,1}x_1+\dots+a_{1,n}x_n=b_1\\
+\qquad\vdots\\
+a_{m,1}x_1+\dots+a_{m,n}x_n=b_m
+\end{cases}
+\]
+es equivalente a la ecuación matricial
+\[
+\begin{pmatrix}a_{1,1}&\cdots&a_{1,n}\\\vdots&&\vdots\\a_{m,1}&\cdots&a_{m,n}\end{pmatrix}
+\times
+\begin{pmatrix}x_1\\\vdots\\x_n\end{pmatrix}
+=
+\begin{pmatrix}b_1\\\vdots\\b_m\end{pmatrix}
+\]
+\[
+AX=B
+\]
+\end{proposicion}
+
+\begin{definicion}
+Se llama matriz identidad de tamaño $n\times n$ a la matriz $I_n=(\delta_{i,j})$ definida por
+\[
+\delta_{i,j}=\begin{cases}1 & \text{si } i=j\\ 0 & \text{si no}\end{cases}
+\qquad
+I_n=\begin{pmatrix}1&&0\\&\ddots&\\0&&1\end{pmatrix}
+\]
+\end{definicion}
+
+\begin{proposicion}
+Para toda matriz $A\in\M_{m\times n}$
+\[
+\underbrace{\underset{m\times m}{I_m}\cdot\underset{m\times n}{A}}_{m\times n}
+=\underbrace{\underset{m\times n}{A}\cdot\underset{n\times n}{I_n}}_{m\times n}=A
+\]
+\end{proposicion}
+
+\begin{definicion}[Matriz inversible]
+Se dice que una matriz cuadrada $A\in\M_{n\times n}$ es invertible cuando existe $B\in\M_{n\times n}$ tal que
+\[
+AB=BA=I_n
+\]
+Cuando es el caso, la matriz $B$ es única se llama la inversa de $A$ y se escribe $B=A^{-1}$.
+\end{definicion}
+
+% =====================================================================
+\clase{8}{}{Matriz inversa}
+
+\subsection{Ecuaciones matriciales. Matriz inversa}
+
+\begin{definicion}
+Se llama matriz identidad de tamaño $n\times n$ a la matriz $I_n=(\delta_{i,j})$ definida por
+\[
+\delta_{i,j}=\begin{cases}1 & \text{si } i=j\\ 0 & \text{si no}\end{cases}
+\qquad
+I_n=\begin{pmatrix}1&&0\\&\ddots&\\0&&1\end{pmatrix}
+\]
+\end{definicion}
+
+\begin{proposicion}
+Para toda matriz $A\in\M_{m\times n}$:
+\[
+I_m\cdot A=A\cdot I_n=A
+\]
+\end{proposicion}
+
+\begin{definicion}
+Una matriz $A\in\M_{n\times n}$ (cuadrada) es inversible cuando existe otra matriz $B\in\M_{n\times n}$ tal que $AB=BA=I_n$.
+
+Y cuando $B$ existe es única y se escribe $B=A^{-1}$ (``es inversa de $A$'').
+\end{definicion}
+
+\begin{demo}[Demostración de la unicidad]
+Supongamos que $A$ tenga 2 inversas $B_1$ y $B_2$. Es decir:
+\[
+AB_1=B_1A=AB_2=B_2A=I
+\]
+tenemos que
+\[
+B_1=B_1\cdot I=B_1(AB_2)=(B_1A)B_2=I\cdot B_2=B_2
+\]
+\end{demo}
+
+\begin{ejemplo}
+$A=\begin{pmatrix}2&1\\1&1\end{pmatrix}$ y $B=\begin{pmatrix}1&-1\\-1&2\end{pmatrix}$
+\[
+AB=\begin{pmatrix}1&0\\0&1\end{pmatrix}\qquad AB=I
+\]
+\[
+BA=\begin{pmatrix}1&0\\0&1\end{pmatrix}\qquad BA=I
+\]
+Luego $B=A^{-1}$ y $A=B^{-1}$.
+\end{ejemplo}
+
+\begin{ejemplo}
+¿Es $A=\begin{pmatrix}1&1&2\\1&-1&-1\\0&0&0\end{pmatrix}$ invertible?
+\[
+\begin{pmatrix}1&1&2\\1&-1&-1\\0&0&0\end{pmatrix}
+\begin{pmatrix}?&?&?\\?&?&?\\?&?&?\end{pmatrix}
+=\begin{pmatrix}?&?&?\\?&?&?\\0&0&0\end{pmatrix}\neq I
+\]
+Conclusión: $A$ no es inversible.
+\end{ejemplo}
+
+Moraleja: Si $A$ tiene una fila o una columna nula, entonces \underline{$A$ no es invertible}.
+
+Propiedades
+\begin{enumerate}[label=(\arabic*),start=0]
+  \item $O_{n\times n}$ no es inversible
+  \item $I$ es inversible, y $I^{-1}=I$
+  \item Si $A$ es inversible y $\lambda\neq0$, entonces $\lambda A$ es inversible, y $(\lambda A)^{-1}=\frac{1}{\lambda}\cdot A^{-1}$
+  \item Si $A$ y $B$ son invertibles, entonces $AB$ es inversible, y $(AB)^{-1}=B^{-1}A^{-1}$
+  \item Si $A$ es inversible, entonces $A^{-1}$ es inversible y $(A^{-1})^{-1}=A$
+  \item Si $A$ es inversible, $A^t$ es inversible, y $(A^t)^{-1}=(A^{-1})^t$
+\end{enumerate}
+
+\begin{demo}[Demostración de (3)]
+Supongamos que $A,B$ son invertibles
+\begin{align*}
+(AB)(B^{-1}A^{-1})&=A(BB^{-1})A^{-1}\\
+&=AIA^{-1}=AA^{-1}=I\\
+(B^{-1}A^{-1})(AB)&=B^{-1}(A^{-1}A)B=B^{-1}B=I
+\end{align*}
+Luego: $(AB)^{-1}=B^{-1}A^{-1}$
+\end{demo}
+
+\begin{demo}[Demostración de (5)]
+\begin{align*}
+A^t(A^{-1})^t&=(A^{-1}A)^t=I^t=I\\
+(A^{-1})^tA^t&=(AA^{-1})^t=I^t=I
+\end{align*}
+Luego: $(A^t)^{-1}=(A^{-1})^t$
+\end{demo}
+
+\begin{observacion}
+Para verificar que $B$ es la inversa de $A$, se necesita verificar dos igualdades:
+\[
+AB=I\quad\text{y}\quad BA=I
+\]
+Por suerte, sólo se necesita verificar una:
+\end{observacion}
+
+\begin{lema}
+Para todas matrices $A,B\in\M_{n\times n}$ tenemos que $AB=I$ sii $BA=I$.
+\end{lema}
+
+\begin{ejemplo}
+Queremos resolver el sistema
+\begin{center}
+$\displaystyle(S)\;\begin{cases}2x+y=3\\x+y=-1\end{cases}$
+\end{center}
+es decir: queremos resolver la ecuación
+\[
+AX=B,\quad\text{con } A=\begin{pmatrix}2&1\\1&1\end{pmatrix},\ X=\begin{pmatrix}x\\y\end{pmatrix},\ B=\begin{pmatrix}3\\-1\end{pmatrix}
+\]
+Y vimos que $A$ es inversible y $A^{-1}=\begin{pmatrix}1&-1\\-1&2\end{pmatrix}$, tenemos que
+\begin{align*}
+AX=B&\Rightarrow A^{-1}AX=A^{-1}B\\
+&\Leftrightarrow X=A^{-1}B
+\end{align*}
+\[
+\Sol(S)=\{A^{-1}B\}
+\]
+\end{ejemplo}
+
+\begin{proposicion}
+Todo sistema cuadrado $AX=B$ cuya matriz de coeficientes $A$ es invertible es compatible determinado:
+\[
+\Sol(S)=\{A^{-1}B\}
+\]
+(esta propiedad no depende de $B$)
+\end{proposicion}
+
+\begin{observacion}
+Cuando $A$ no es inversible, no se puede concluir nada. (Misma obs.\ cuando $A$ no es cuadrada.)
+\end{observacion}
+
+\begin{ejemplo}
+Sea $A=\begin{pmatrix}2&1\\4&3\end{pmatrix}$. Queremos determinar (si existe) la matriz $X=\begin{pmatrix}x_{11}&x_{12}\\x_{21}&x_{22}\end{pmatrix}$ tal que
+\[
+AX=I
+\]
+\[
+AX=\begin{pmatrix}2x_{11}+x_{21} & 2x_{12}+x_{22}\\ 4x_{11}+3x_{21} & 4x_{12}+3x_{22}\end{pmatrix}
+\]
+La ecuación $AX=I$ se reduce a 2 sistemas:
+\[
+\begin{cases}2x_{11}+x_{21}=1\\4x_{11}+3x_{21}=0\end{cases}
+\quad\left(\begin{array}{cc|c}2&1&1\\4&3&0\end{array}\right)
+\qquad
+A\begin{pmatrix}x_{11}\\x_{21}\end{pmatrix}=\begin{pmatrix}1\\0\end{pmatrix}
+\]
+\[
+\begin{cases}2x_{12}+x_{22}=0\\4x_{12}+3x_{22}=1\end{cases}
+\quad\left(\begin{array}{cc|c}2&1&0\\4&3&1\end{array}\right)
+\qquad
+A\begin{pmatrix}x_{12}\\x_{22}\end{pmatrix}=\begin{pmatrix}0\\1\end{pmatrix}
+\]
+\[
+\begin{array}{ll}
+\left(\begin{array}{cc|c}2&1&1\\4&3&0\end{array}\right)
+&
+\left(\begin{array}{cc|c}2&1&0\\4&3&1\end{array}\right)
+\\[12pt]
+\left(\begin{array}{cc|c}2&1&1\\0&1&-2\end{array}\right)F_2:=F_2-2F_1
+&
+\left(\begin{array}{cc|c}2&1&0\\0&1&1\end{array}\right)F_2:=F_2-2F_1
+\\[12pt]
+\left(\begin{array}{cc|c}2&0&3\\0&1&-2\end{array}\right)F_1:=F_1-F_2
+&
+\left(\begin{array}{cc|c}2&0&-1\\0&1&1\end{array}\right)F_1:=F_1-F_2
+\\[12pt]
+\left(\begin{array}{cc|c}1&0&3/2\\0&1&-2\end{array}\right)
+&
+\left(\begin{array}{cc|c}1&0&-1/2\\0&1&1\end{array}\right)
+\\[12pt]
+\begin{pmatrix}x_{1,1}\\x_{2,1}\end{pmatrix}=\begin{pmatrix}3/2\\-2\end{pmatrix}
+&
+\begin{pmatrix}x_{1,2}\\x_{2,2}\end{pmatrix}=\begin{pmatrix}-1/2\\1\end{pmatrix}
+\end{array}
+\]
+Conclusión: $X=A^{-1}=\begin{pmatrix}3/2&-1/2\\-2&1\end{pmatrix}$
+
+Se podían resolver ambos sistemas simultáneamente
+\begin{multline*}
+\left(\begin{array}{cc|cc}2&1&1&0\\4&3&0&1\end{array}\right)
+\xrightarrow{F_2-2F_1}
+\left(\begin{array}{cc|cc}2&1&1&0\\0&1&-2&1\end{array}\right)\\
+\xrightarrow{F_1-F_2}
+\left(\begin{array}{cc|cc}2&0&3&-1\\0&1&-2&1\end{array}\right)
+\longrightarrow
+\left(\begin{array}{cc|cc}1&0&3/2&-1/2\\0&1&-2&1\end{array}\right)
+\end{multline*}
+donde $\begin{pmatrix}3/2&-1/2\\-2&1\end{pmatrix}=A^{-1}$.
+\end{ejemplo}
+
+% =====================================================================
+\clase{9}{}{Inversión y matrices elementales}
+
+\subsection{Inversión de matrices}
+
+Recordatorio: Una matriz cuadrada $A\in\M_{n\times n}$ es inversible cuando existe $B\in\M_{n\times n}$ tal que $AB=I$ y $BA=I$.
+
+\begin{observacion}\leavevmode
+\begin{enumerate}[label=\arabic*)]
+  \item Cuando $B$ existe, es único y se escribe $A^{-1}$.
+  \item Sólo se necesita una de las igualdades $AB=I$ y $BA=I$ pues son equivalentes (por un lema admitido).
+\end{enumerate}
+\end{observacion}
+
+Dada una matriz $A\in\M_{n\times n}$, queremos hallar (si existe) una matriz $X\in\M_{n\times n}$ tal que $AX=I_n$.
+\[
+X=\begin{pmatrix} X^1 & X^2 & \cdots & X^n\end{pmatrix}
+\qquad
+AX=\begin{pmatrix} AX^1 & AX^2 & \cdots & AX^n\end{pmatrix}
+\]
+Resolver $AX=I_n$ se reduce a resolver $n$ sistemas lineales, que son:
+\[
+AX^1=I_n^1=\begin{pmatrix}1\\0\\\vdots\\0\end{pmatrix}\quad\left(A\,\middle|\,\begin{matrix}1\\0\\\vdots\\0\end{matrix}\right)
+\qquad\cdots\qquad
+AX^n=I_n^n=\begin{pmatrix}0\\\vdots\\0\\1\end{pmatrix}\quad\left(A\,\middle|\,\begin{matrix}0\\\vdots\\0\\1\end{matrix}\right)
+\]
+\[
+\begin{array}{ccc}
+(A\,|\,I_n^1) & \cdots\cdots & (A\,|\,I_n^n)\\
+\big\downarrow & & \\
+(E\,|\,B^1) & \cdots\cdots & (E\,|\,B^n)
+\end{array}
+\qquad\qquad
+\begin{array}{c}
+(A\,|\,I_n)\\ \big\downarrow\\ (E\,|\,B)
+\end{array}
+\]
+
+\subsubsection*{Método de cálculo de \texorpdfstring{$A^{-1}$}{A-1}}
+
+Dada una matriz $A\in\M_{n\times n}$
+\begin{enumerate}[label=\arabic*.]
+  \item Formar la matriz doble $(A\,|\,I_n)$
+  \item Aplicar el método de escalerización de Rouché--Frobenius a la matriz doble $(A\,|\,I_n)$ hasta que la parte izquierda esté en forma escalerizada:
+  \[
+  (A\,|\,I_n)\rightsquigarrow(E\,|\,B)
+  \]
+\end{enumerate}
+\begin{itemize}
+  \item Si $E$ tiene $n$ escalones, entonces $A$ es invertible. Y si está en forma reducida, tenemos que $E=I_n$ y $B=A^{-1}$.
+  \item Si $E$ tiene menos de $n$ escalones, entonces $A$ no es inversible.
+\end{itemize}
+
+\begin{ejemplo}
+Invertir $A=\begin{pmatrix}1&0&2\\2&1&3\\-1&1&-1\end{pmatrix}$
+\begin{align*}
+&\left(\begin{array}{ccc|ccc}1&0&2&1&0&0\\2&1&3&0&1&0\\-1&1&-1&0&0&1\end{array}\right)\\[4pt]
+&\left(\begin{array}{ccc|ccc}1&0&2&1&0&0\\0&1&-1&-2&1&0\\0&1&1&1&0&1\end{array}\right)
+\begin{array}{l}F_2:=F_2-2F_1\\F_3:=F_3+F_1\end{array}\\[4pt]
+&\left(\begin{array}{ccc|ccc}1&0&2&1&0&0\\0&1&-1&-2&1&0\\0&0&2&3&-1&1\end{array}\right)
+F_3:=F_3-F_2\quad\longleftarrow\text{ Ya sabemos que $A$ es invertible.}\\[4pt]
+&\left(\begin{array}{ccc|ccc}1&0&2&1&0&0\\0&1&-1&-2&1&0\\0&0&1&3/2&-1/2&1/2\end{array}\right)
+F_3:=\tfrac12F_3\\[4pt]
+&\Bigl(\underbrace{\begin{array}{ccc}1&0&0\\0&1&0\\0&0&1\end{array}}_{I_3}\Bigm|
+\underbrace{\begin{array}{ccc}-2&1&-1\\-1/2&1/2&1/2\\3/2&-1/2&1/2\end{array}}_{A^{-1}}\Bigr)
+\begin{array}{l}F_1:=F_1-2F_3\\F_2:=F_2+F_3\end{array}
+\end{align*}
+Conclusión: $A$ es inversible y
+\[
+A^{-1}=\begin{pmatrix}-2&1&-1\\-1/2&1/2&1/2\\3/2&-1/2&1/2\end{pmatrix}
+\]
+\end{ejemplo}
+
+Recordatorio: El rango de una matriz $A$ es el número de escalones de cualquier forma escalerizada. (Este número no depende de la forma escalerizada.)
+
+\begin{proposicion}
+Una matriz cuadrada $A\in\M_{n\times n}$ es inversible si y sólo si $\rg(A)=n$.
+\end{proposicion}
+
+\begin{demo}
+($\Rightarrow$) Supongamos que $A$ es invertible. Entonces toda columna $B\in\M_{n\times1}$, el sistema $AX=B$ es compatible determinado, pues:
+\[
+AX=B\iff X=A^{-1}B\qquad(\Sol(S)=\{A^{-1}B\})
+\]
+Esto implica (por el teorema de Rouché--Frobenius) que $\rg(A)=n$.
+
+($\Leftarrow$) Supongamos que $\rg(A)=n$. Por Rouché--Frobenius, esto implica que todos los sistemas de la forma $AX=B$ (con $B\in\M_{n\times1}$ cualquiera) es compatible determinado.
+
+Sean $X^1,X^2,\dots,X^n$ las (únicas) soluciones de los sistemas:
+\[
+AX^1=I_n^1=\begin{pmatrix}1\\0\\\vdots\\0\end{pmatrix},\quad\dots,\quad AX^n=I_n^n=\begin{pmatrix}0\\\vdots\\0\\1\end{pmatrix}
+\]
+Por construcción tenemos que:
+\[
+AX=\begin{pmatrix}AX^1&\cdots&AX^n\end{pmatrix}=\begin{pmatrix}1&&0\\&\ddots&\\0&&1\end{pmatrix}=I
+\]
+\end{demo}
+
+\begin{ejercicio}
+Determinar el rango de $A=\begin{pmatrix}1&2&3\\4&5&6\\7&8&9\end{pmatrix}$.
+\end{ejercicio}
+\begin{solucion}
+\[
+\begin{pmatrix}1&2&3\\0&-3&-6\\0&-6&-12\end{pmatrix}
+\begin{array}{l}F_2:=F_2-4F_1\\F_3:=F_3-7F_1\end{array}
+\]
+\begin{center}
+$\displaystyle\begin{pmatrix}1&2&3\\0&-3&-6\\0&0&0\end{pmatrix}\;F_3:=F_3-2F_2$
+\end{center}
+Conclusión: $\rg(A)=2$.
+\end{solucion}
+
+\subsection{Matrices elementales}
+
+Objetivo: mostrar que cada transformación elemental sobre una matriz $A$ de tamaño $m\times n$ se puede ver como un producto (por la izquierda) por cierta matriz $E$ de tamaño $m\times m$ (matriz elemental).
+
+Tres tipos:
+\begin{enumerate}[label=(\arabic*)]
+  \item $T_{\alpha i}$: multiplicar fila $i$ por $\alpha\neq0$
+  \item $T_{i\leftrightarrow j}$: intercambiar las filas $i$ y $j$
+  \item $T_{i+\alpha j}$: sumarle a la fila $i$ la fila $j$ $(\neq i)$ multiplicada por $\alpha$
+\end{enumerate}
+
+\begin{proposicion}
+Sean $m,n\geq1$. Para toda transformación elemental $T$ (sobre matrices con $m$ filas)
+\begin{enumerate}[label=(\arabic*)]
+  \item Existe una matriz $E\in\M_{m\times m}$ tal que $T(A)=E_TA$ para toda matriz $A\in\M_{m\times n}$.
+  \item Además, la matriz $E_T$ asociada a la transformación $T$ está dada por $E_T=T(I_m)$.
+\end{enumerate}
+$E_T$ se llama una matriz elemental.
+\end{proposicion}
+
+(1) $T=T_{\alpha i}$
+\[
+E_{\alpha i}=\begin{pmatrix}
+1&&&&\\
+&\ddots&&&\\
+&&\alpha&&\\
+&&&\ddots&\\
+&&&&1
+\end{pmatrix}
+\begin{matrix}\\\\\leftarrow\text{fila } i\\\\\\\end{matrix}
+\]
+Verificación: $E_{\alpha i}A=T_{\alpha i}(A)$
+
+(2) $T=T_{i\leftrightarrow j}$
+\[
+E_{i\leftrightarrow j}:=T(I_n)=\begin{pmatrix}
+1&&&&&&\\
+&\ddots&&&&&\\
+&&0&\cdots&1&&\\
+&&\vdots&\ddots&\vdots&&\\
+&&1&\cdots&0&&\\
+&&&&&\ddots&\\
+&&&&&&1
+\end{pmatrix}
+\begin{matrix}\\\\\leftarrow\text{fila } j\\\\\leftarrow\text{fila } i\\\\\\\end{matrix}
+\]
+Verificación: $E_{i\leftrightarrow j}A=T_{i\leftrightarrow j}(A)$
+
+(3)
+\[
+E_{i+\alpha j}:=T_{i+\alpha j}(I_n)=\begin{pmatrix}
+1&&&&\\
+&1&\cdots&\alpha&\\
+&&\ddots&\vdots&\\
+&&&1&\\
+&&&&1
+\end{pmatrix}
+\begin{matrix}\\-\,i\\\\-\,j\\\\\end{matrix}
+\]
+Verificación: $E_{i+\alpha j}A=T_{i+\alpha j}(A)$
+
+\begin{ejemplo}
+Sea $E$ la matriz elemental asociada $F_3\leftarrow F_3+4F_1$
+\[
+E=\begin{pmatrix}1&0&0\\0&1&0\\4&0&1\end{pmatrix}\qquad
+\text{Sea } A=\begin{pmatrix}1&0&2&1\\2&-1&3&6\\1&4&4&0\end{pmatrix}
+\]
+\[
+EA=\begin{pmatrix}1&0&2&1\\2&-1&3&6\\5&4&12&4\end{pmatrix}\qquad F_3\leftarrow F_3+4F_1
+\]
+\end{ejemplo}
+
+% =====================================================================
+\clase{10}{}{Invertibles y determinantes}
+
+\subsection{Matrices invertibles}
+
+\begin{proposicion}
+Toda matriz elemental es invertible. En particular:
+\begin{enumerate}[label=\arabic*.]
+  \item $(E_{\alpha i})^{-1}=E_{\alpha^{-1}i}$
+  \item $(E_{i\leftrightarrow j})^{-1}=E_{i\leftrightarrow j}$
+  \item $(E_{i+\alpha j})^{-1}=E_{i-\alpha j}$
+\end{enumerate}
+La inversa de cada matriz elemental es una matriz elemental.
+\end{proposicion}
+
+\begin{proposicion}
+Sea $A$ una matriz de tamaño $m\times n$ y $A'$ una forma escalerizada de $A$. Entonces existe una sucesión finita $E_1,E_2,\dots,E_k$ de matrices elementales tal que:
+\[
+A'=E_k\cdots E_2E_1A
+\]
+\end{proposicion}
+
+\begin{corolario}
+Una matriz cuadrada $A\in\M_{n\times n}$ es inversible si y sólo si es producto finito de matrices elementales:
+\[
+\iff A=E_1E_2\cdots E_k\qquad\text{para algunos } E_1,E_2,\dots,E_k \text{ matrices elementales}
+\]
+(descomposición no única)
+\end{corolario}
+
+\begin{demo}
+($\Leftarrow$) Si $A=E_1E_2\cdots E_k$, $A$ es inversible pues todas las matrices $E_i$ lo son.
+
+($\Rightarrow$) Si $A$ es invertible, entonces se puede escalerizar hasta $I_n$. Por la prop.\ anterior, existe matrices elementales $E_1,E_2,\dots,E_k$ tales que:
+\[
+I=E_k\cdots E_2E_1A
+\]
+Luego $A^{-1}=E_k\cdots E_2E_1$ (por unicidad de la inversa). Por lo tanto
+\begin{align*}
+A=(A^{-1})^{-1}&=(E_k\cdots E_2E_1)^{-1}\\
+&=\underbrace{E_1^{-1}E_2^{-1}\cdots E_k^{-1}}_{\text{producto finito de matrices elementales}}
+\end{align*}
+\end{demo}
+
+\subsection{Determinantes}
+
+Objetivo: asociar a cada matriz cuadrada $A\in\M_{n\times n}$ un número $\abs{A}\in\R$ tal que $A$ es invertible $\iff\abs{A}\neq0$.
+
+\subsubsection*{Definición del determinante}
+
+\begin{definicion}[Matriz adjunta]
+Sea $A$ una matriz cuadrada de dimensión $n\geq2$. Dados índices $i,j\in[1..n]$, se llama matriz adjunta a $A$ la matriz $A_{i,j}$ (cuadrada) de dimensión $n-1$ obtenida eliminando la fila $i$ y la columna $j$.
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+  \node at (-0.9,1) {$A_{i,j}=$};
+  \draw (0.1,0) -- (0,0) -- (0,2) -- (0.1,2);
+  \draw (2.4,0) -- (2.5,0) -- (2.5,2) -- (2.4,2);
+  \fill[gray!40] (0,1.15) rectangle (2.5,1.35);
+  \fill[gray!40] (1.35,0) rectangle (1.55,2);
+  \node[right] at (2.6,1.25) {$i$};
+  \node[below] at (1.45,0) {$j$};
+  \node[right] at (3.4,1) {$n\geq2$ filas y columnas};
+\end{tikzpicture}
+\end{center}
+\end{definicion}
+
+\begin{definicion}
+El determinante $\abs{A}\in\R$ se define con inducción sobre la dimensión de $A$ de modo siguiente:
+\begin{itemize}
+  \item Si $n=1$: $\abs{A}=a_{1,1}$ (única entrada de $A$)
+  \item Si $n\geq2$:
+  \begin{align*}
+  \abs{A}&=\sum_{i=1}^{n}(-1)^{i+1}a_{i,1}\cdot\abs{A_{i,1}}\\
+  &=a_{1,1}\abs{A_{1,1}}-a_{2,1}\abs{A_{2,1}}+\dots+(-1)^{n+1}a_{n,1}\abs{A_{n,1}}
+  \end{align*}
+\end{itemize}
+\end{definicion}
+
+\begin{proposicion}
+En dimensión 2:
+\[
+\begin{vmatrix}a&b\\c&d\end{vmatrix}=ad-cb
+\]
+\end{proposicion}
+
+\begin{ejemplo}\leavevmode
+\begin{enumerate}[label=(\arabic*)]
+  \item $\begin{vmatrix}3&1\\7&2\end{vmatrix}=3\cdot2-7\cdot1=-1$
+  \item
+  \begin{align*}
+  \begin{vmatrix}3&-4&3\\-1&2&7\\-2&4&0\end{vmatrix}
+  &=3\begin{vmatrix}2&7\\4&0\end{vmatrix}-(-1)\begin{vmatrix}-4&3\\4&0\end{vmatrix}+(-2)\begin{vmatrix}-4&3\\2&7\end{vmatrix}\\
+  &=3\cdot(-28)+(-12)-2(-34)=-84-12+68=-28
+  \end{align*}
+  \item
+  \[
+  \begin{vmatrix}2&0&1&1\\2&2&-4&-1\\-3&1&1&1\\2&-2&0&0\end{vmatrix}=
+  \]
+  % En el escaneo (pág. 31) este determinante queda sin calcular.
+\end{enumerate}
+\end{ejemplo}
+
+\begin{ejemplo}
+$\abs{O_n}=0$, \qquad $\abs{I_n}=1$
+\end{ejemplo}
+
+\begin{proposicion}
+Para toda matriz $A\in\M_{n\times n}$, con $n\geq2$
+\[
+\boxed{\abs{A}=\sum_{i=1}^{n}(-1)^{i+j}\cdot a_{i,j}\abs{A_{i,j}}}\qquad\text{para cada índice de columna } j\in[1..n]
+\]
+\[
+\boxed{\abs{A}=\sum_{j=1}^{n}(-1)^{i+j}a_{i,j}\abs{A_{i,j}}}\qquad\text{para todo índice de fila } i\in[1..n]
+\]
+\end{proposicion}
+
+% =====================================================================
+\clase{11}{}{Propiedades del determinante}
+
+\subsection{Determinantes}
+
+\begin{definicion}
+El determinante $\abs{A}$ $(\in\R)$ de una matriz cuadrada $A\in\M_{n\times n}$ está definido por inducción sobre $n$:
+\begin{itemize}
+  \item $n=1$: $\abs{A}=a_{1,1}$ (única entrada)
+  \item $n\geq2$:
+  \begin{align*}
+  \abs{A}&=a_{1,1}\abs{A_{1,1}}-a_{2,1}\abs{A_{2,1}}+a_{3,1}\abs{A_{3,1}}-\dots+(-1)^{n+1}a_{n,1}\abs{A_{n,1}}\\
+  &=\sum_{i=1}^{n}(-1)^{i+1}a_{i,1}\abs{A_{i,1}}
+  \end{align*}
+\end{itemize}
+\end{definicion}
+
+\begin{itemize}
+  \item $\begin{vmatrix}a&b\\c&d\end{vmatrix}=ad-cb$
+  \item $\abs{O_n}=0$ y $\abs{I_n}=1$ para todo $n\geq1$.
+\end{itemize}
+
+\subsection{Complejidad}
+
+\begin{itemize}
+  \item[] $n=1$: 1 entrada
+  \item[] $n=2$: suma de 2 productos de 2 entradas.
+  \item[] $n=3$: suma de 6 productos de 3 entradas.
+  \item[] Caso general: suma de $n!$ productos de $n$ entradas.
+\end{itemize}
+
+\subsection{Desarrollo por filas y columnas}
+
+\begin{proposicion}
+Dada $A\in\M_{n\times n}$, con $n\geq2$, tenemos que:
+\begin{align*}
+\abs{A}&=\sum_{i=1}^{n}(-1)^{i+j}a_{i,j}\abs{A_{i,j}}\qquad\text{para todo } j\in[1..n]\\
+&=\sum_{j=1}^{n}(-1)^{i+j}a_{i,j}\abs{A_{i,j}}\qquad\text{para todo } i\in[1..n]
+\end{align*}
+\end{proposicion}
+
+\begin{proposicion}
+Para toda matriz $A\in\M_{n\times n}$: $\abs{A^t}=\abs{A}$
+\end{proposicion}
+
+\begin{ejemplo}
+Determinante de una matriz triangular superior
+\[
+A=\begin{pmatrix}\alpha_1&*&\cdots&*\\&\ddots&\ddots&\vdots\\&&\ddots&*\\0&&&\alpha_n\end{pmatrix}
+\qquad \abs{A}=\alpha_1\alpha_2\cdots\alpha_n
+\]
+Caso particular (matrices diagonales)
+\[
+\begin{vmatrix}\alpha_1&&0\\&\ddots&\\0&&\alpha_n\end{vmatrix}=\alpha_1\cdots\alpha_n
+\]
+\end{ejemplo}
+
+\subsection{Propiedades del determinante}
+
+¡¡¡Ojo!!! El determinante no es una función lineal:
+
+En general:
+\[
+\abs{A+B}\neq\abs{A}+\abs{B},\qquad \abs{\lambda\cdot A}\neq\lambda\abs{A}
+\]
+
+\begin{proposicion}[Aditividad respecto a una fila]
+Para toda matriz $A\in\M_{n\times n}$, para todo $i\in[1..n]$ y para toda descomposición de la fila $i$ en la forma $A_i=B_i+C_i$, tenemos que
+\[
+\abs{A}=\begin{vmatrix}A_1\\\vdots\\A_i\\\vdots\\A_n\end{vmatrix}
+=\begin{vmatrix}A_1\\\vdots\\B_i\\\vdots\\A_n\end{vmatrix}
++\begin{vmatrix}A_1\\\vdots\\C_i\\\vdots\\A_n\end{vmatrix}
+\]
+si $A_i=B_i+C_i$.
+\end{proposicion}
+
+\begin{ejemplo}
+\begin{align*}
+\begin{vmatrix}1&2&3\\4&5&6\\7&8&9\end{vmatrix}
+&=\begin{vmatrix}0&1&2\\4&5&6\\7&8&9\end{vmatrix}
++\begin{vmatrix}1&1&1\\4&5&6\\7&8&9\end{vmatrix}\\
+&=\begin{vmatrix}1&2&3\\3&2&1\\7&8&9\end{vmatrix}
++\begin{vmatrix}1&2&3\\1&3&5\\7&8&9\end{vmatrix}
+\end{align*}
+\end{ejemplo}
+
+\begin{proposicion}
+Misma propiedad para las columnas.
+\end{proposicion}
+
+\begin{proposicion}[Homogeneidad]
+Dada una matriz $A=\begin{pmatrix}A_1\\\vdots\\A_n\end{pmatrix}$, para todo índice $i\in[1..n]$, tenemos que:
+\[
+\begin{vmatrix}A_1\\\vdots\\\lambda A_i\\\vdots\\A_n\end{vmatrix}=\lambda\abs{A}
+\]
+\end{proposicion}
+
+\begin{proposicion}
+Misma propiedad para las columnas.
+\end{proposicion}
+
+\begin{ejemplo}
+\begin{center}
+$\displaystyle
+\begin{vmatrix}1&2&3\\4&5&6\\7&8&9\end{vmatrix}
+=\frac12\begin{vmatrix}2&4&6\\4&5&6\\7&8&9\end{vmatrix}
+=\frac13\begin{vmatrix}1&2&3\\12&15&18\\7&8&9\end{vmatrix}$
+\end{center}
+\end{ejemplo}
+
+\begin{corolario}
+$\abs{\lambda\cdot A}=\lambda^n\cdot\abs{A}$
+\end{corolario}
+
+\begin{proposicion}
+\[
+\abs[\big]{\smash[b]{\underbrace{T_{i\leftrightarrow j}(A)}_{\mathclap{\substack{A\text{ con filas}\\ i\text{ y } j\text{ intercambiadas}}}}}}=-\abs{A}\vphantom{\underbrace{T}_{\substack{A\\A}}}
+\]
+Misma propiedad para las columnas.
+\end{proposicion}
+
+\begin{proposicion}[corolario]
+$\abs{T_{i+\alpha j}(A)}=\abs{A}$
+\[
+\begin{vmatrix}A_1\\\vdots\\A_i+\alpha A_j\\\vdots\\A_n\end{vmatrix}
+=\begin{vmatrix}A_1\\\vdots\\A_i\\\vdots\\A_n\end{vmatrix}
++\alpha\underbrace{\begin{vmatrix}A_1\\\vdots\\A_j\\\vdots\\A_n\end{vmatrix}}_{\substack{\text{filas } i\text{ y } j\text{ idénticas}\\ \text{determinante}=0}}
+\]
+Misma propiedad para las columnas.
+\end{proposicion}
+
+\begin{ejemplo}
+\begin{align*}
+\begin{vmatrix}
+1&1&1&1&1&1\\
+1&-1&1&-1&1&-1\\
+1&1&-1&-1&1&1\\
+1&1&1&-1&-1&-1\\
+1&1&1&1&2&2\\
+1&1&1&1&1&2
+\end{vmatrix}
+&=
+\begin{vmatrix}
+1&1&1&1&1&1\\
+0&-2&0&-2&0&-2\\
+0&0&-2&-2&0&0\\
+0&0&0&-2&-2&-2\\
+0&0&0&0&1&1\\
+0&0&0&0&0&1
+\end{vmatrix}\\
+&=1\cdot(-2)\cdot(-2)\cdot(-2)\cdot1\cdot1\\
+&=-8
+\end{align*}
+\end{ejemplo}
+
+\subsection{Determinantes nulos}
+
+\begin{proposicion}
+Sea $A$ una matriz cuadrada. Cuando una de las siguientes propiedades se cumple, tenemos que $\abs{A}=0$.
+\begin{enumerate}[label=\arabic*)]
+  \item $A$ tiene una fila (columna) nula.
+  \item $A$ tiene dos filas (dos columnas) iguales.
+  \item $A$ tiene dos filas (dos columnas) proporcionales.
+  \item $A$ tiene una fila (o una columna) que es combinación lineal de las filas (columnas) restantes.
+\end{enumerate}
+\end{proposicion}
+
+\subsection{Determinante de un producto}
+
+Recordatorio:
+\[
+\abs{A+B}\neq\abs{A}+\abs{B}\ \text{(en general)},\qquad
+\abs{\lambda\cdot A}=\lambda^n\cdot\abs{A}\quad(\neq\lambda\cdot\abs{A})
+\]
+
+\begin{teorema}[Binet--Cauchy]
+Para todas matrices $A,B\in\M_{n\times n}$: $\abs{AB}=\abs{A}\cdot\abs{B}$
+\end{teorema}
+
+% =====================================================================
+\clase{12}{}{Determinante del producto e inversa}
+
+\subsection{Determinante de un producto}
+
+\begin{teorema}[Binet--Cauchy]
+$\forall A,B\in\M_{n\times n}$, \quad $\abs{AB}=\abs{A}\cdot\abs{B}$
+\end{teorema}
+
+\begin{lema}\label{lema:elemental}
+Si $A$ es una matriz elemental, entonces $\abs{AB}=\abs{A}\cdot\abs{B}$ \hfill (Para todo $B\in\M_{n\times n}$)
+\end{lema}
+
+\begin{demo}
+3 casos:
+\begin{enumerate}[label=(\arabic*)]
+  \item $A=E_{i\leftrightarrow j}=T_{i\leftrightarrow j}(I_n)$. Tenemos que $\abs{A}=-\abs{I_n}=-1$.
+
+  $AB=E_{i\leftrightarrow j}B=T_{i\leftrightarrow j}(B)$. Tenemos que $\abs{AB}=(-1)\abs{B}=\abs{A}\cdot\abs{B}$
+  \item Caso donde $A=E_{\alpha i}=T_{\alpha i}(I_n)$ \quad $(\alpha\neq0)$
+
+  Entonces $\abs{A}=\alpha\abs{I_n}=\alpha$
+  \[
+  AB=E_{\alpha i}B=T_{\alpha i}(B)
+  \]
+  $\abs{AB}=\alpha\abs{B}$. \qquad Luego: $\abs{AB}=\alpha\abs{B}=\underbrace{\abs{A}}_{\alpha}\cdot\abs{B}$
+  \item Caso donde $A=E_{i+\alpha j}=T_{i+\alpha j}(I_n)$
+
+  Entonces $\abs{A}=\abs{I_n}=1$
+  \[
+  AB=E_{i+\alpha j}B=T_{i+\alpha j}(B)
+  \]
+  $\abs{AB}=\abs{B}=\underbrace{\abs{A}}_{1}\cdot\abs{B}$
+\end{enumerate}
+\end{demo}
+
+\begin{lema}\label{lema:invertible}
+Si $A$ es invertible, entonces
+\[
+\abs{AB}=\abs{A}\cdot\abs{B}\qquad(\text{Para toda } B\in\M_{n\times n})
+\]
+\end{lema}
+
+\begin{demo}
+Como $A$ es invertible, existen matrices elementales $E_1,E_2,\dots,E_k$ tales que $A=E_1E_2\cdots E_k$. Tenemos que
+\[
+\abs{A}=\abs{E_1E_2\cdots E_k}=\abs{E_1}\cdot\abs{E_2\cdots E_k}
+\]
+Además, tenemos que:
+\begin{align*}
+\abs{AB}&=\abs{E_1E_2\cdots E_kB}\\
+&=\abs{E_1}\times\abs{E_2\cdots E_kB} && \Big\}\ \text{lema~\ref{lema:elemental} $k$ veces}\\
+&=\underbrace{\abs{E_1}\cdot\abs{E_2}\cdots\abs{E_k}}_{\abs{A}}\cdot\abs{B}\\
+&=\abs{A}\cdot\abs{B}
+\end{align*}
+\end{demo}
+
+\begin{lema}\label{lema:noinvertible}
+Si $A$ no es invertible, entonces $\abs{A}=0$
+\end{lema}
+
+\begin{demo}
+Sea $A'$ una forma escalerizada de $A$. Y sean $E_1,E_2,\dots,E_k$ matrices elementales tales que $A'=E_k\cdots E_2E_1A$. También tenemos que
+\[
+A=(E_k\cdots E_2E_1)^{-1}A'
+\]
+Como $A'$ tiene $<n$ escalones \quad $\abs{A'}=0$
+
+Luego:
+\[
+\abs{A}=\abs[\big]{\underbrace{(E_k\cdots E_2E_1)^{-1}}_{\text{Invertible}}}\cdot\abs{A'}=0
+\]
+\end{demo}
+
+\begin{lema}\label{lema:producto}
+Si $A$ no es invertible, entonces $AB$ tampoco es invertible (Para toda $B$).
+\end{lema}
+
+\begin{demo}
+Por el absurdo, supongamos que $AB$ es invertible. Sea $A':=B(AB)^{-1}$. Se observa que:
+\[
+AA'=A\bigl(B(AB)^{-1}\bigr)=(AB)(AB)^{-1}=I
+\]
+Luego: $A'$ es la inversa de $A$ y $A$ es invertible. \hfill Contradicción.
+\end{demo}
+
+\begin{demo}[Demostración del teorema de Binet--Cauchy]
+Sean $A,B\in\M_{n\times n}$ cualquiera. Se distinguen dos casos:
+
+\underline{Caso 1}: $A$ es invertible
+\[
+\abs{AB}=\abs{A}\abs{B}\qquad(\text{lema~\ref{lema:invertible}})
+\]
+\underline{Caso 2}: $A$ no es invertible.
+
+Entonces $\abs{A}=0$ (lema~\ref{lema:noinvertible})
+
+$AB$ no es invertible (lema~\ref{lema:producto})
+
+Luego $\abs{AB}=0$ (lema~\ref{lema:noinvertible})
+
+Por lo tanto: $\abs{AB}=0=0\cdot\abs{B}=\abs{A}\cdot\abs{B}$
+\end{demo}
+
+\subsection{Determinante y matriz inversa}
+
+\begin{teorema}
+Para toda matriz $A\in\M_{n\times n}$, tenemos que $A$ es invertible si y sólo si $\abs{A}\neq0$.
+
+Además $\abs{A^{-1}}=1/\abs{A}$.
+\end{teorema}
+
+\begin{demo}
+Si $A$ es invertible: $\abs{A}=\abs{E_1}\times\dots\times\abs{E_k}\neq0$.
+
+Si $A$ no es invertible: $\abs{A}=0$ (Por el ~\ref{lema:noinvertible})
+
+Además, cuando $A$ es invertible
+\[
+\abs{A}\cdot\abs{A^{-1}}=\abs{AA^{-1}}=\abs{I_n}=1,\quad\text{luego } \abs{A^{-1}}=1/\abs{A}.
+\]
+\end{demo}
+
+\begin{definicion}
+Dada una matriz $A\in\M_{n\times n}$ se llama cofactor de $A$ en la posición $(i,j)$ el número
+\[
+C_{i,j}:=(-1)^{i+j}\abs{A_{i,j}}
+\]
+Los números $(C_{i,j})_{\substack{1\leq i\leq n\\1\leq j\leq n}}$ forman una matriz, escrita $\cof(A)$ \hfill «matriz de los cofactores»
+\end{definicion}
+
+\begin{teorema}
+Para toda matriz cuadrada $A$:
+\[
+A\cdot\cof(A)^t=\abs{A}\cdot I_n
+\]
+En particular, cuando $A$ es invertible ($\abs{A}\neq0$) tenemos que:
+\[
+A^{-1}=\frac{1}{\abs{A}}\cdot\cof(A)^t
+\]
+\end{teorema}
+
+% =====================================================================
+\end{document}
