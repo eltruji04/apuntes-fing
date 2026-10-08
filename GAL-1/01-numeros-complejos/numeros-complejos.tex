@@ -1,0 +1,214 @@
+% =====================================================================
+%  numeros-complejos.tex — Unidad: Números complejos
+%  Requiere apuntes.sty (estilo/ en la raíz del repo; ver README).
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+\usepackage{apuntes}
+
+% ---------- Macros propias de esta materia (solo si hacen falta) ----------
+\DeclareMathOperator{\Arg}{Arg}
+\let\Re\relax\DeclareMathOperator{\Re}{Re}
+\let\Im\relax\DeclareMathOperator{\Im}{Im}
+
+% ---------- Metadatos ----------
+\materia{GAL 1}
+\curso{Teórico}
+\unidad{Números complejos}
+\periodo{Clases 1 a 2 --- 2026}
+\hypersetup{pdfauthor={Santiago Trujillo}}
+
+\begin{document}
+\maketitle
+\vspace{-1.6em}
+\begin{center}
+  {\normalsize Santiago Trujillo\par}
+\end{center}
+\vspace{0.5em}
+\tableofcontents
+
+% =====================================================================
+%  CLASES — cada clase nueva se agrega AL FINAL, sin tocar las anteriores
+% =====================================================================
+
+\clase{1}{}{Números complejos y conjugado}
+
+\subsection{Número complejo}
+
+\begin{definicion}
+Los números complejos son los pares ordenados $(a,b)$ de números reales ($a,b\in\R$) con las siguientes operaciones:
+\begin{enumerate}[label=(\arabic*)]
+  \item $(a,b)+(c,d)=(a+c,\ b+d)$
+  \item $(a,b)\cdot(c,d)=(ac-bd,\ ad+bc)$
+\end{enumerate}
+\end{definicion}
+
+\[
+z=a+bi,\quad a,b\in\R,\qquad i^2=-1
+\]
+
+\begin{align*}
+\frac{1}{1+2i}=a+bi &\iff 1=(1+2i)(a+bi)=a+bi+2ai+2i^2b\\
+&\phantom{\iff 1}=a-2b+i(b+2a)=1=1+0\cdot i
+\end{align*}
+\[
+\begin{cases} a-2b=1\\ 2a+b=0 \end{cases}
+\longrightarrow\quad
+\begin{array}{r}
+a-2b=1\\
+4a+2b=0\\ \hline
+5a=1
+\end{array}
+\;\Rightarrow\; a=\frac15,\qquad b=-2a=\frac{-2}{5}
+\]
+
+\begin{ejercicio}
+Encontrar $x,y\in\R$ tales que $(x+yi)(2+i)=3-i$.
+\end{ejercicio}
+\begin{solucion}
+\[
+(x+yi)(2+i)=2x+xi+2yi+yi^2=2x-y+(x+2y)\cdot i=3-i
+\]
+\[
+\begin{cases} 2x-y=3\\ x+2y=-1 \end{cases}
+\]
+\end{solucion}
+% Nota: en el escaneo el sistema queda planteado, sin resolver (pág. 1).
+
+\subsection{Conjugado de un número complejo}
+
+\begin{definicion}
+Dado $z=a+bi$, el conjugado de $z$ es $\overline{z}=a-bi$.
+\[
+z=1+3i,\qquad \overline{z}=1-3i
+\]
+\end{definicion}
+
+Propiedades:
+\begin{enumerate}[label=(\arabic*)]
+  \item $\overline{z+w}=\overline{z}+\overline{w}$
+  \item $\overline{z\cdot w}=\overline{z}\cdot\overline{w}$
+  \item $z+\overline{z}=2\Re(z)$
+  \item $z-\overline{z}=2i\Im(z)$
+\end{enumerate}
+
+\begin{ejercicio}
+Hallar $z\in\C$ tal que $2z-3\overline{z}=\dfrac{-27+23i}{1+i}$.
+\end{ejercicio}
+\begin{solucion}
+Sea $z=a+bi$, $\overline{z}=a-bi$:
+\[
+2(a+bi)-3(a-bi)=\frac{-27+23i}{1+i}
+\]
+\[
+-a+5bi=\frac{-27+23i}{1+i}\;\Longrightarrow\;(1+i)(-a+5bi)=-27+23i
+\]
+\[
+-a-5b+i(5b-a)=-27+23i
+\]
+\[
+\begin{cases} -a-5b=-27\\ -a+5b=23\end{cases}
+\xrightarrow{\text{lo sumo}}\; -2a=-4\Rightarrow \boxed{a=2}
+\]
+\[
+-2+5b=23\Rightarrow 5b=25\Rightarrow\boxed{b=5}
+\qquad\qquad
+\boxed{z=2+5i}
+\]
+\end{solucion}
+
+% =====================================================================
+\clase{2}{}{Módulo y forma polar}
+
+\subsection{Números complejos}
+
+\[
+z=a+bi,\qquad \abs{z}=\sqrt{a^2+b^2}
+\]
+
+\begin{observacion}\leavevmode
+\begin{enumerate}[label=\arabic*)]
+  \item $\abs{z}\in\R$
+  \item $\abs{z}\geq 0$
+  \item $\abs{z}=0\iff a,b=0\iff z=0$
+\end{enumerate}
+\end{observacion}
+
+\begin{center}
+\begin{tikzpicture}[scale=1]
+  \draw[->] (-0.3,0) -- (4,0);
+  \draw[->] (0,-0.3) -- (0,3);
+  \draw[-{Stealth},thick] (0,0) -- (3,2.4) node[right] {$z=a+bi$};
+  \draw[->] (0.9,0) arc (0:38.7:0.9);
+  \node at (1.2,0.4) {$\varphi$};
+  \node[right] at (5,2) {$\varphi=\Arg(z)$};
+  \node[right] at (5,0.6) {$\Arg(z)\in[0,2\pi)$};
+\end{tikzpicture}
+\end{center}
+
+\begin{observacion}
+Si $\Arg(z)=\varphi$ y $\abs{z}=\rho$, entonces:
+\begin{center}
+\begin{tikzpicture}[scale=1,baseline=(current bounding box.center)]
+  \draw[->] (-0.3,0) -- (3.4,0);
+  \draw[->] (0,-0.3) -- (0,3);
+  \draw[thick] (0,0) -- (2.4,2.6);
+  \draw[dashed] (2.4,2.6) -- (2.4,0);
+  \draw[->] (0.6,0) arc (0:47:0.6);
+  \node at (0.85,0.3) {$\varphi$};
+  \node at (1,1.55) {$\rho$};
+  \draw[decorate,decoration={brace,amplitude=4pt}] (2.5,2.6) -- (2.5,0) node[midway,right=3pt] {$b$};
+  \draw[decorate,decoration={brace,amplitude=4pt,mirror}] (0,-0.1) -- (2.4,-0.1) node[midway,below=3pt] {$a$};
+\end{tikzpicture}
+\qquad
+$\begin{aligned}
+a&=\rho\cdot\cos\varphi=\Re(z)\\
+b&=\rho\cdot\sen\varphi=\Im(z)\\
+z&=\rho\cdot\cos\varphi+i\,\rho\cdot\sen\varphi\\
+&\boxed{z=\rho_{\varphi}}
+\end{aligned}$
+\end{center}
+\end{observacion}
+
+Puede probarse que: si $z_1=\rho_1\angle\varphi_1$, $z_2=\rho_2\angle\varphi_2$, entonces:
+\[
+z_1\cdot z_2=\rho_1\cdot\rho_2\angle\varphi_1+\varphi_2
+\]
+
+\begin{ejemplo}
+$z=1\angle\frac{\pi}{4}$
+\[
+z=1\cdot\cos\frac{\pi}{4}+i\,1\cdot\sen\frac{\pi}{4}
+\]
+\begin{center}
+\begin{tikzpicture}[scale=1.2,baseline=(current bounding box.center)]
+  \draw[->] (-1.3,0) -- (1.4,0);
+  \draw[->] (0,-1.3) -- (0,1.4);
+  \draw (0,0) circle (1);
+  \draw[thick] (0,0) -- (0.707,0.707);
+  \draw[dashed] (0.707,0.707) -- (0.707,0);
+  \node at (0.25,0.5) {$1$};
+  \node[right] at (0.72,0.35) {$a$};
+  \node[below] at (0.35,0) {$a$};
+\end{tikzpicture}
+\qquad
+$\begin{aligned}
+a^2+a^2&=1\\
+2a^2&=1\\
+a^2&=\tfrac12\\
+a&=\tfrac{1}{\sqrt2}
+\end{aligned}$
+\end{center}
+\[
+z=\frac{1}{\sqrt2}+i\,\frac{1}{\sqrt2}
+\]
+\end{ejemplo}
+
+Entonces: si $z=\rho\angle\varphi$, \quad $z^n=\rho^n\angle n\cdot\varphi$.
+
+Si $z_1=\rho_1\angle\varphi_1$ y $z_2=\rho_2\angle\varphi_2$ con $z_2\neq0$ $\Rightarrow$
+\[
+\frac{z_1}{z_2}=\frac{\rho_1}{\rho_2}\angle\varphi_1-\varphi_2
+\]
+
+% =====================================================================
+\end{document}
