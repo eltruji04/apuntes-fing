@@ -1,0 +1,125 @@
+% =====================================================================
+%  apuntes.sty — Estándar de apuntes de Santiago (v1.0, 2026-10-01)
+%  Uso:  \usepackage{apuntes}   (este archivo junto al .tex)
+%  Estructura: un .tex por UNIDAD; dentro, \clase{...} y \subsection por tema.
+%  NO modificar por materia: lo propio de cada materia va en el .tex.
+% =====================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{apuntes}[2026/10/01 v1.0 Apuntes de clase]
+
+% ---------- Idioma y fuentes (con respaldo si falta algo) ----------
+\RequirePackage[utf8]{inputenc}
+\IfFileExists{lmodern.sty}{%
+  \RequirePackage[T1]{fontenc}\RequirePackage{lmodern}}{}
+\IfFileExists{spanish.ldf}{%
+  \RequirePackage[spanish,es-noshorthands,es-nodecimaldot]{babel}}{%
+  % Sin babel-spanish: nombres en español a mano
+  \renewcommand{\contentsname}{Índice}%
+  \renewcommand{\figurename}{Figura}%
+  \renewcommand{\tablename}{Tabla}}
+
+% ---------- Página ----------
+\RequirePackage[a4paper,margin=2.5cm,headheight=14pt]{geometry}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+% ---------- Matemática ----------
+\RequirePackage{amsmath,amssymb,amsthm}
+\RequirePackage{mathtools}
+\RequirePackage{bm}
+\RequirePackage{cancel}
+\RequirePackage{siunitx}
+
+% ---------- Listas, tablas, figuras ----------
+\RequirePackage{enumitem}
+\RequirePackage{booktabs}
+\RequirePackage{array}
+\RequirePackage{graphicx}
+\RequirePackage{xcolor}
+\RequirePackage{tikz}
+\usetikzlibrary{arrows.meta,calc,decorations.pathreplacing,patterns}
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.17}
+
+% ---------- Encabezado ----------
+\RequirePackage{fancyhdr}
+\RequirePackage[hidelinks]{hyperref}
+
+% ---------- Metadatos del documento ----------
+\newcommand{\materia}[1]{\def\@materia{#1}}
+\newcommand{\curso}[1]{\def\@curso{#1}}
+\newcommand{\unidad}[1]{\def\@unidad{#1}}
+\newcommand{\periodo}[1]{\def\@periodo{#1}}
+\materia{Materia}\curso{Teórico}\unidad{Unidad}\periodo{}
+
+\renewcommand{\maketitle}{%
+  \begin{center}
+    {\LARGE\bfseries \@unidad\par}\vspace{0.4em}
+    {\large \@materia\ --- \@curso\par}\vspace{0.2em}
+    {\normalsize \@periodo\par}
+  \end{center}\vspace{0.5em}\thispagestyle{plain}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\@materia\ --- \@unidad}
+\fancyhead[R]{\small\nouppercase{\leftmark}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ---------- Jerarquía: Clase > temas ----------
+% \clase{número}{fecha AAAA-MM-DD}{título breve}
+% La sección toma el número de la clase, así "Definición 18.3" = clase 18.
+\newcommand{\clase}[3]{%
+  \clearpage
+  \setcounter{section}{\numexpr #1 - 1\relax}%
+  \refstepcounter{section}%
+  \section*{Clase #1 --- #3\hfill{\normalsize\normalfont #2}}%
+  \addcontentsline{toc}{section}{Clase #1 --- #3}%
+  \markboth{Clase #1 --- #3}{}}
+% Temas dentro de la clase: \subsection{...}; sub-temas: \subsubsection*{...}
+
+% ---------- Entornos (estilo sobrio) ----------
+\theoremstyle{definition}
+\newtheorem{definicion}{Definición}[section]
+\newtheorem{teorema}[definicion]{Teorema}
+\newtheorem{proposicion}[definicion]{Proposición}
+\newtheorem{lema}[definicion]{Lema}
+\newtheorem{corolario}[definicion]{Corolario}
+\newtheorem{ejemplo}[definicion]{Ejemplo}
+\newtheorem{ejercicio}[definicion]{Ejercicio}
+\newtheorem*{observacion}{Observación}
+\newtheorem*{notacion}{Notación}
+\newtheorem*{convencion}{Convención}
+\newtheorem*{idea}{Idea}
+\newtheorem*{contraejemplo}{Contraejemplo}
+\renewcommand{\qedsymbol}{$\blacksquare$}
+\newenvironment{demo}[1][Demostración]{\begin{proof}[#1]}{\end{proof}}
+\newenvironment{solucion}{\begin{proof}[Solución]\renewcommand{\qedsymbol}{$\square$}}{\end{proof}}
+
+% ---------- Marcas de transcripción ----------
+% \corr{lo correcto}{lo que decía el original}  -> corrige + nota al pie
+\newcommand{\corr}[2]{#1\footnote{Corregido. En el original: #2.}}
+% Marca de nota entre corchetes y separada: no se confunde con un exponente
+\renewcommand\@makefnmark{\hbox{\,\normalfont\textsuperscript{[\@thefnmark]}}}
+% \ilegible{mejor lectura}  -> texto dudoso + nota al pie
+\newcommand{\ilegible}[1]{#1\footnote{Lectura dudosa del original; verificar contra el escaneo.}}
+% \comentario{...}  -> aparte del docente / comentario al margen del apunte
+\newcommand{\comentario}[1]{{\color{gray!70!black}\small\itshape(#1)}}
+
+% ---------- Macros generales ----------
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\K}{\mathbb{K}}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\newcommand{\dd}{\,\mathrm{d}}
+\providecommand{\sen}{\operatorname{sen}}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\rg}{rango}
+\DeclareMathOperator{\gen}{gen}
+
+\endinput
