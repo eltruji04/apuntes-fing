@@ -29,6 +29,7 @@ apuntes-fing/
 | # | Tema | PDF |
 |---|------|-----|
 | 01 | Integrales | [PDF](CDIV/01-integrales/integrales.pdf) |
+| 02 | Límites y continuidad | [PDF](CDIV/02-limites-y-continuidad/limites-y-continuidad.pdf) |
 
 ## Compilar
 
