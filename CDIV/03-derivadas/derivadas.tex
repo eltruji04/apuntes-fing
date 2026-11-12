@@ -1,0 +1,1424 @@
+% =====================================================================
+%  derivadas.tex — CDIV — Derivadas (Teórico)
+%  Requiere apuntes.sty (estilo/ en la raíz del repo; ver README).
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+\usepackage{apuntes}
+
+% ---------- Macros propias de esta materia (solo si hacen falta) ----------
+% \abajo[rótulo]{expresión}{límite}: flecha vertical bajo una expresión,
+% como en las hojas (ej.: \abajo[x\to x_0]{f(x)-f(x_0)}{0}).
+\newcommand{\abajo}[3][]{\underset{\substack{\downarrow\,#1\\ #3}}{#2}}
+% Arcoseno (notación de las hojas).
+\DeclareMathOperator{\arcsen}{arcsen}
+% Estilo de las gráficas de funciones trigonométricas y sus inversas.
+\pgfplotsset{trig/.style={
+  axis lines=middle, width=5.2cm,
+  tick label style={font=\scriptsize}, title style={font=\small},
+  enlargelimits=false, clip=true, samples=100, smooth}}
+
+% ---------- Metadatos ----------
+\materia{CDIV}
+\curso{Teórico}
+\unidad{Derivadas}
+\periodo{Clases 29 a 36 --- 2026}
+\hypersetup{pdfauthor={Santiago Trujillo}}
+
+\begin{document}
+\maketitle
+\vspace{-1.6em}
+\begin{center}
+  {\normalsize Santiago Trujillo\par}
+\end{center}
+\vspace{0.5em}
+\tableofcontents
+
+% =====================================================================
+%  CLASES — cada clase nueva se agrega AL FINAL, sin tocar las anteriores
+% =====================================================================
+
+% Clase 29: la primera mitad (funciones trigonométricas) va en
+% CDIV-Trigonometria.tex. Sin fecha en la hoja.
+\clase{29}{}{Derivada en un punto}
+
+\subsection{Derivada en un punto}
+
+\begin{definicion}
+  Sean $f\colon I\to\R$ y $x_0\in I$.
+  Se dice que $f$ es \emph{derivable en $x_0$} cuando el cociente
+  \[
+    \frac{f(x)-f(x_0)}{x-x_0}
+  \]
+  tiene límite finito cuando $x\to x_0$. Se escribe
+  \[
+    f'(x_0)=\lim_{x\to x_0}\frac{f(x)-f(x_0)}{x-x_0}
+    \qquad \text{(derivada de $f$ en $x_0$)}
+  \]
+\end{definicion}
+
+\begin{observacion}
+  \[
+    x\longmapsto \frac{f(x)-f(x_0)}{x-x_0}
+  \]
+  está definida en $I-\{x_0\}$.
+\end{observacion}
+
+\begin{observacion}
+  También tenemos que
+  \[
+    f'(x_0)=\lim_{h\to 0}\frac{f(x_0+h)-f(x_0)}{h}
+  \]
+\end{observacion}
+
+\subsection{Recta tangente}
+
+\begin{center}
+\begin{tikzpicture}[scale=1,
+    declare function={g(\x)=2+1.3*sin(deg(0.95*(\x-2.3)));}]
+  \pgfmathsetmacro{\xa}{2.7}
+  \pgfmathsetmacro{\xb}{3.9}
+  \pgfmathsetmacro{\ya}{g(\xa)}
+  \pgfmathsetmacro{\yb}{g(\xb)}
+  \pgfmathsetmacro{\m}{(\yb-\ya)/(\xb-\xa)}
+  % ejes
+  \draw[-{Stealth}] (-0.2,0) -- (6,0);
+  \draw[-{Stealth}] (0,-0.6) -- (0,4.2);
+  % curva
+  \draw[thick,domain=0.5:5.4,smooth,samples=60] plot (\x,{g(\x)});
+  % recta secante R_h
+  \draw (0.9,{\ya+\m*(0.9-\xa)}) -- (5.2,{\ya+\m*(5.2-\xa)});
+  \node[left] at (0.9,{\ya+\m*(0.9-\xa)}) {$R_h$};
+  % puntos
+  \fill (\xa,\ya) circle (1.6pt);
+  \fill (\xb,\yb) circle (1.6pt);
+  \draw[dashed] (\xa,\ya) -- (\xa,0) node[below] {$x_0$};
+  \draw[dashed] (\xb,\yb) -- (\xb,0) node[below] {$x_0+h$};
+  \node[above left]  at (\xa,\ya) {$f(x_0)$};
+  \node[above] at (\xb,{\yb+0.25}) {$f(x_0+h)$};
+\end{tikzpicture}
+\end{center}
+
+Dados $(x_0,y_0)$, $(x_1,y_1)$:
+\[
+  R\colon\ y=y_0+\frac{y_1-y_0}{x_1-x_0}\,(x-x_0)
+\]
+
+\[
+  \boxed{R_h\colon\ y=f(x_0)+\frac{f(x_0+h)-f(x_0)}{h}\,(x-x_0)}
+\]
+\[
+  \Big\downarrow\ h\to 0
+\]
+\[
+  \boxed{R_0\colon\ y=f(x_0)+f'(x_0)\cdot(x-x_0)}
+\]
+
+$f'(x_0)=$ Es la pendiente de la recta tangente a la gráfica de $f$
+en el punto $(x_0,f(x_0))$.
+
+% =====================================================================
+% Sin fecha en la hoja.
+\clase{30}{}{Continuidad y reglas de derivación}
+
+\subsection{Derivabilidad y continuidad}
+
+\begin{proposicion}
+  Si $f\colon I\to\R$ es derivable en el punto $x_0\in I$ entonces es
+  continua en $x_0$.
+\end{proposicion}
+
+\begin{demo}
+  Por hipótesis, tenemos que
+  \[
+    \lim_{x\to x_0}\frac{f(x)-f(x_0)}{x-x_0}=f'(x_0)
+  \]
+  \[
+    \abajo[x\to x_0]{f(x)-f(x_0)}{0}
+    =\abajo[x\to x_0]{\frac{f(x)-f(x_0)}{x-x_0}}{f'(x_0)}
+    \times\abajo{(x-x_0)}{0}
+  \]
+  Luego $\displaystyle\lim_{x\to x_0}f(x)=f(x_0)$.
+\end{demo}
+
+\begin{observacion}
+  La condición de derivabilidad es más exigente que la condición de
+  continuidad. Ejemplo: $f(x)=\abs{x}$.
+
+  \begin{center}
+  \begin{tikzpicture}[scale=0.9]
+    \draw[-{Stealth}] (-2.6,0) -- (2.8,0) node[right] {$x$};
+    \draw[-{Stealth}] (0,-0.8) -- (0,2.6) node[above] {$y$};
+    \draw[thick] (-2.2,2.2) -- (0,0) -- (2.2,2.2);
+  \end{tikzpicture}
+  \end{center}
+
+  \textit{Caso:} $x_0>0$. En un entorno de $x_0$, tenemos que
+  $f(x)=\abs{x}=x$
+  \[
+    \frac{f(x)-f(x_0)}{x-x_0}=\frac{\abs{x}-\abs{x_0}}{x-x_0}
+    =\frac{x-x_0}{x-x_0}=1\longrightarrow 1=f'(x_0)
+  \]
+
+  \textit{Caso:} $x_0<0$. En un entorno de $x_0$, tenemos
+  $\abs{x}=-x$
+  \[
+    \frac{f(x)-f(x_0)}{x-x_0}=\frac{\abs{x}-\abs{x_0}}{x-x_0}
+    =\frac{-x+x_0}{x-x_0}=-1\longrightarrow -1=f'(x_0)
+  \]
+
+  \textit{Caso} $x_0=0$:
+  \[
+    \frac{f(x)-f(x_0)}{x-x_0}=\frac{\abs{x}}{x}=
+    \begin{cases}
+      1 & \text{si } x>0\\
+      -1 & \text{si } x<0
+    \end{cases}
+  \]
+  $f$ no es derivable en el punto $x_0=0$.
+\end{observacion}
+
+\begin{ejemplo}
+  Sean $f,g,h\colon\R\to\R$ def por
+  \[
+    f(x)=\begin{cases}
+      1 & \text{si } x\in\Q\\
+      -1 & \text{si } x\notin\Q
+    \end{cases}
+    \qquad
+    g(x)=\begin{cases}
+      x & \text{si } x\in\Q\\
+      -x & \text{si } x\notin\Q
+    \end{cases}
+  \]
+  \[
+    h(x)=\begin{cases}
+      x^2 & \text{si } x\in\Q\\
+      -x^2 & \text{si } x\notin\Q
+    \end{cases}
+  \]
+  \begin{itemize}
+    \item $f$ es discontinua en todos los puntos de $\R$
+    \item $g$ es continua en $x_0=0$ y discontinua en todos los otros
+      puntos de $\R$.
+    \item[--] $g$ no es derivable en $x_0=0$
+    \item $h$ es discontinua en todo punto $x_0\neq 0$.
+    \item $h$ es continua en $x_0=0$ y derivable
+  \end{itemize}
+  \[
+    \frac{h(x)-h(x_0)}{x-x_0}=\frac{h(x)}{x}=\abajo[x\to 0]{g(x)}{0}
+  \]
+  $h'(0)=0$
+\end{ejemplo}
+
+\subsection{Propiedades algebraicas}
+
+\begin{proposicion}
+  Sean $f,g\colon I\to\R$ y $x_0\in I$. Si $f$ y $g$ son derivables en
+  $x_0$, entonces:
+  \begin{enumerate}[label=(\arabic*)]
+    \item $f+g$ es derivable en $x_0$ y $(f+g)'(x_0)=f'(x_0)+g'(x_0)$
+    \item $f-g$ es derivable en $x_0$ y $(f-g)'(x_0)=f'(x_0)-g'(x_0)$
+    \item $fg$ es derivable en $x_0$ y
+      $(fg)'(x_0)=f'(x_0)g(x_0)+f(x_0)g'(x_0)$
+  \end{enumerate}
+  Además, si $g$ no se anula en un entorno de $x_0$, entonces
+  $\dfrac{f}{g}$ es derivable en $x_0$ y
+  \[
+    \left(\frac{f}{g}\right)'(x_0)
+    =\frac{f'(x_0)g(x_0)-f(x_0)g'(x_0)}{g^2(x_0)}
+  \]
+\end{proposicion}
+
+\begin{demo}
+  (1)
+  \[
+    \frac{f(x)+g(x)-\bigl(f(x_0)+g(x_0)\bigr)}{x-x_0}
+    =\abajo{\frac{f(x)-f(x_0)}{x-x_0}}{f'(x_0)}
+    +\abajo{\frac{g(x)-g(x_0)}{x-x_0}}{g'(x_0)}
+  \]
+  Por suma de límites:
+  \[
+    \lim_{x\to x_0}\frac{f(x)+g(x)-\bigl(f(x_0)+g(x_0)\bigr)}{x-x_0}
+    =f'(x_0)+g'(x_0)
+  \]
+
+  (2) Idem.
+
+  (3)
+  \begin{align*}
+    \frac{f(x)g(x)-f(x_0)g(x_0)}{x-x_0}
+    &\neq\frac{f(x)-f(x_0)}{x-x_0}\times\frac{g(x)-g(x_0)}{x-x_0}\\
+    &=\frac{\bigl(f(x)-f(x_0)\bigr)g(x)+f(x_0)\bigl(g(x)-g(x_0)\bigr)}{x-x_0}\\
+    &=\abajo{\frac{f(x)-f(x_0)}{x-x_0}}{f'(x_0)}
+      \times\abajo{g(x)}{g(x_0)}
+      +\underset{\substack{\|\\ f(x_0)}}{f(x_0)}
+      \times\abajo{\frac{g(x)-g(x_0)}{x-x_0}}{g'(x_0)}
+  \end{align*}
+\end{demo}
+
+(4) Además, si $g$ no se anula en un entorno de $x_0$, entonces
+$\dfrac{f}{g}$ es derivable en $x_0$ y
+\[
+  \left(\frac{f}{g}\right)'(x_0)
+  =\frac{f'(x_0)g(x_0)-f(x_0)g'(x_0)}{g^2(x_0)}
+\]
+
+\subsection{Funciones derivables}
+
+\begin{definicion}
+  $f\colon I\to\R$ es \emph{derivable en $I$} cuando es derivable en cada
+  punto de $I$.
+
+  Se define la \emph{función derivada} $f'\colon I\to\R$ por
+  \[
+    f'(x_0):=\lim_{x\to x_0}\frac{f(x)-f(x_0)}{x-x_0}
+    \qquad\text{para todo } x_0\in I
+  \]
+\end{definicion}
+
+\begin{proposicion}
+  Si $f,g\colon I\to\R$ son derivables en $I$, entonces
+  \begin{itemize}
+    \item $(f+g)'=f'+g'$
+    \item $(f-g)'=f'-g'$
+    \item $(\lambda f)'=\lambda f'$ \quad $(\lambda\in\R)$
+    \item $(fg)'=f'g+fg'$
+    \item $\left(\dfrac{f}{g}\right)'=\dfrac{f'g-fg'}{g^2}$
+      \quad (si $g(x)\neq 0$ $\forall x\in I$)
+  \end{itemize}
+\end{proposicion}
+
+\begin{ejemplo}
+  $f(x)=x^p$ \quad $(p\geq 1)$
+
+  Se observa que si $p\geq 1$, tenemos que
+  \[
+    x^p-x_0^p=(x-x_0)\sum_{k=0}^{p-1}x^k x_0^{p-1-k}
+  \]
+  \[
+    \frac{x^p-x_0^p}{x-x_0}
+    =\sum_{k=0}^{p-1}\abajo{x^k x_0^{p-1-k}}{x_0^k x_0^{p-1-k}
+      =x_0^{p-1}}
+    \xrightarrow{\ x\to x_0\ } p\,x_0^{p-1}
+  \]
+
+\end{ejemplo}
+
+\begin{ejemplo}
+  $f(x)=\sen x$
+
+  \textit{Caso:} $x_0=0$
+  \[
+    \frac{\sen x-\sen 0}{x-0}=\frac{\sen x}{x}\xrightarrow{\ x\to 0\ }1
+  \]
+  $\sen'(0)=1$
+
+  \textit{Caso:} $x\in\R$ cualquiera
+  \[
+    \frac{\sen(x+h)-\sen(x)}{h}
+    =\frac{\sen(x)\cos(h)+\cos(x)\sen(h)-\sen(x)}{h}
+  \]
+  \[
+    \sen(x)\abajo[h\to 0]{\left(\frac{\cos(h)-1}{h}\right)}{}
+    +\cos(x)\abajo[h\to 0]{\left(\frac{\sen(h)}{h}\right)}{}
+  \]
+  \[
+    \sen(x)\cdot 0\ +\ \cos(x)\cdot 1
+  \]
+  $\sen'(x)=\cos(x)$
+\end{ejemplo}
+
+\begin{ejemplo}
+  $f\colon\R_+\longrightarrow\R$ \quad $f(x)=\log x$
+
+  Derivada en $x_0=1$
+  \[
+    \frac{\log(x)-\log(1)}{x-1}=\frac{\log x}{x-1}
+  \]
+  \textit{Recordatorio:}
+  \[
+    \underbrace{1-\frac{1}{x}}_{\frac{x-1}{x}}\leq\log x\leq x-1
+  \]
+  \[
+    \abajo[x\to 1]{\frac{1}{x}}{1}\leq\abajo{\frac{\log x}{x-1}}{1}
+    \leq\abajo[x\to 1]{1}{1}
+  \]
+  Conclusión: $\log'(1)=1$
+
+  Sea $x_0\in\R^+$ fijado
+  \begin{align*}
+    \frac{\log(x)-\log(x_0)}{x-x_0}
+    &=\frac{\log\left(x_0\times\frac{x}{x_0}\right)-\log(x_0)}{x-x_0}
+     =\frac{\log(x_0)+\log\left(\frac{x}{x_0}\right)-\log(x_0)}{x-x_0}\\
+    &=\frac{\log\left(\frac{x}{x_0}\right)}{x-x_0}
+     =\frac{1}{x_0}\times\frac{\log\left(\frac{x}{x_0}\right)}
+       {\left(\frac{x}{x_0}\right)-1}
+     \xrightarrow{\ x\to x_0\ }\frac{1}{x_0}\times 1
+  \end{align*}
+\end{ejemplo}
+
+% =====================================================================
+% Sin fecha en la hoja.
+\clase{31}{}{Regla de la cadena e inversas}
+
+\subsection{Ejemplos}
+
+\begin{itemize}
+  \item $(x^n)'=n\cdot x^{n-1}$ \quad $(n\geq 1)$
+  \item $c'=0$ \quad ($c\in\R$ constante)
+  \item $\log'(x)=\dfrac{1}{x}$ \quad (si $x>0$)
+  \item $\cos'(x)=-\sen(x)$
+  \item $\sen'(x)=\cos(x)$
+\end{itemize}
+
+\[
+  \tan(x)=\frac{\sen(x)}{\cos(x)}
+\]
+\begin{align*}
+  \tan'(x)&=\frac{\sen'(x)\cos(x)-\sen(x)\cos'(x)}{\cos^2(x)}\\
+  &=\frac{\cos^2(x)+\sen^2(x)}{\cos^2(x)}=\frac{1}{\cos^2(x)}\\
+  &=1+\frac{\sen^2(x)}{\cos^2(x)}=1+\tan^2(x)
+\end{align*}
+
+\begin{observacion}
+  $\displaystyle f(x)=\sum_{i=0}^{n}a_i x^i$ \quad (Polinomio)
+  \begin{align*}
+    f'(x)&=\sum_{i=1}^{n}a_i\times i\,x^{i-1}\\
+    &=\sum_{i=0}^{n-1}(i+1)\,a_{i+1}\,x^i
+  \end{align*}
+\end{observacion}
+
+\subsection{Fracciones racionales}
+
+\[
+  f(x)=\frac{p(x)}{q(x)}\quad\longleftarrow\ \text{Polinomios}
+\]
+\[
+  \left.f'(x)=\frac{p'(x)q(x)-p(x)q'(x)}{q^2(x)}\ \right\}
+  \ \text{Fracción racional}
+\]
+
+\subsection{Regla de la cadena}
+
+\begin{proposicion}
+  Sean $f\colon I\to\R$ y $g\colon J\to\R$ tal que:
+  \begin{itemize}
+    \item[--] $f,g$ son derivables (en $I$, $J$)
+    \item[--] $f(I)\subset J$ \ ($=\operatorname{dom}g$)
+  \end{itemize}
+  Entonces la función compuesta $g\circ f\colon I\to\R$ es derivable en
+  $I$, y para todo $x_0\in I$:
+  \[
+    (g\circ f)'(x_0)=g'\bigl(f(x_0)\bigr)\cdot f'(x_0)
+  \]
+\end{proposicion}
+
+\begin{demo}
+  Sean $h\colon I\to\R$ y $k\colon J\to\R$ definidas por
+  \[
+    h(x)=\begin{cases}
+      \dfrac{f(x)-f(x_0)}{x-x_0} & \text{si } x\neq x_0\\[2ex]
+      f'(x_0) & \text{si } x=x_0
+    \end{cases}
+  \]
+  \[
+    k(y)=\begin{cases}
+      \dfrac{g(y)-g\bigl(f(x_0)\bigr)}{y-f(x_0)} & \text{si } y\neq f(x_0)\\[2ex]
+      g'\bigl(f(x_0)\bigr) & \text{si } y=f(x_0)
+    \end{cases}
+  \]
+  Por construcción: $h\colon I\to\R$ y $k\colon J\to\R$ son continuas en
+  sus respectivos intervalos.
+
+  Por construcción:
+  \begin{align*}
+    f(x)-f(x_0)&=(x-x_0)\,h(x) && \forall x\in I \quad (1)\\
+    g(y)-g\bigl(f(x_0)\bigr)&=\bigl(y-f(x_0)\bigr)\,k(y) && \forall y\in J \quad (2)
+  \end{align*}
+  tenemos que
+  \begin{align*}
+    g\bigl(f(x)\bigr)-g\bigl(f(x_0)\bigr)
+    &=\bigl(f(x)-f(x_0)\bigr)\,k\bigl(f(x)\bigr) \qquad (\text{por } 2)\\
+    &=(x-x_0)\,h(x)\,k\bigl(f(x)\bigr)
+  \end{align*}
+  Luego: $\forall x\neq x_0$:
+  \[
+    \frac{g\bigl(f(x)\bigr)-g\bigl(f(x_0)\bigr)}{x-x_0}
+    =\abajo[x\to x_0]{h(x)}{f'(x_0)}
+    \times\abajo{k\bigl(f(x)\bigr)}{g'(f(x_0))}
+  \]
+\end{demo}
+
+\subsection{Funciones inversas}
+
+\textit{Marco:} Sea $f\colon I\to\R$ continua y estrictamente creciente o
+decreciente.
+
+Ya vimos que:
+\begin{itemize}
+  \item[--] La función $f$ es inyectiva y establece una biyección entre $I$
+    y su imagen $J:=f(I)$
+  \item[--] $J$ es un intervalo (por Bolzano)
+  \item[--] La función inversa $f^{-1}\colon J\to\R$ es continua
+\end{itemize}
+
+\begin{proposicion}
+  Si $f\colon I\to\R$ es:
+  \begin{itemize}
+    \item[--] estrictamente creciente (decreciente) en $I$
+    \item[--] derivable en $I$
+    \item[--] su derivada no se anula en $I$: $f'(x)\neq 0$
+  \end{itemize}
+  Entonces, la función inversa $f^{-1}\colon J\to\R$ (con $J=f(I)$) es
+  derivable en $J$ y
+  \[
+    (f^{-1})'(y)=\frac{1}{f'\bigl(f^{-1}(y)\bigr)}\qquad\forall y\in J
+  \]
+\end{proposicion}
+
+\[
+  \underbrace{(f\circ f^{-1})'}_{\text{id}}(y)
+  =f'\bigl(f^{-1}(y)\bigr)\times(f^{-1})'(y)
+\]
+\[
+  1=f'\bigl(f^{-1}(y)\bigr)\times(f^{-1})'(y)
+\]
+
+\begin{demo}
+  Sean $y_0\in J$ y $x_0=f^{-1}(y_0)\in I$.
+
+  Sea $h\colon I\to\R$ def por
+  \[
+    h(x)=\begin{cases}
+      \dfrac{x-x_0}{f(x)-f(x_0)} & \text{si } x\neq x_0\\[2ex]
+      1/f'(x_0) & \text{si } x=x_0
+    \end{cases}
+  \]
+  Por construcción: $h\colon I\to\R$ es continua, entonces
+  $h\circ f^{-1}\colon J\to\R$ es continua.
+
+  $\forall y\neq f(x_0)$ \qquad $f^{-1}(y)\neq x_0$
+  \[
+    \begin{array}{l@{\;}l}
+      h\circ f^{-1}(y) & =\dfrac{f^{-1}(y)-x_0}{f\bigl(f^{-1}(y)\bigr)-f(x_0)}\\[3ex]
+      \Big\downarrow\rlap{$\scriptstyle\ y\to y_0$} & \\[1ex]
+      h\bigl(f^{-1}(y_0)\bigr) & =\dfrac{f^{-1}(y)-f^{-1}(y_0)}{y-y_0}\\[2ex]
+      \quad\| & \\
+      h(x_0) & \\
+      \quad\| & \\
+      1/f'(x_0) & =\dfrac{1}{f'\bigl(f^{-1}(y_0)\bigr)}
+    \end{array}
+  \]
+\end{demo}
+
+\begin{contraejemplo}
+  $f(x)=x^3$ en $\R$ es estrictamente creciente en $\R$.
+
+  Tenemos que $f^{-1}(y)=\sqrt[3]{y}$
+  \[
+    f'(x)=3x^2\geq 0
+  \]
+  \begin{center}
+  \begin{tikzpicture}[scale=0.9]
+    \draw (-1.6,0) -- (1.6,0);
+    \draw (0,-1.6) -- (0,1.6);
+    \draw[thick,domain=-1.17:1.17,smooth,samples=50]
+      plot (\x,{\x*\x*\x});
+  \end{tikzpicture}
+  \hspace{2.5cm}
+  \begin{tikzpicture}[scale=0.9]
+    \draw (-1.6,0) -- (1.6,0);
+    \draw (0,-1.6) -- (0,1.6);
+    \draw[thick,domain=-1.17:1.17,smooth,samples=50]
+      plot ({\x*\x*\x},\x);
+  \end{tikzpicture}
+  \end{center}
+\end{contraejemplo}
+
+% =====================================================================
+% Sin fecha en la hoja.
+\clase{32}{}{Derivadas de funciones inversas}
+
+\subsection{Funciones inversas}
+
+\begin{proposicion}
+  Sea $f\colon I\to\R$ una función tal que:
+  \begin{itemize}
+    \item[--] $f$ es estrictamente creciente o decreciente en $I$
+    \item[--] $f$ es derivable en $I$
+    \item[--] $f'(x)\neq 0$ \ $\forall x\in I$
+  \end{itemize}
+  Entonces, la función inversa $f^{-1}\colon J\to\R$ (donde $J=f(I)$) es
+  derivable en $J$ y:
+  \[
+    (f^{-1})'(y)=\frac{1}{f'\bigl(f^{-1}(y)\bigr)}\qquad\forall y\in J
+  \]
+\end{proposicion}
+
+\begin{ejemplo}
+  Sea $f(x)=\log(x)$ en $\R^+=(0,+\infty)$
+  \begin{itemize}
+    \item Ya vimos que $\log$ es estrictamente creciente en $\R^+$ y define
+      una biyección entre $\R^+$ y $\R$ cuya inversa es la función
+      exponencial $\exp\colon\R\to\R^+$
+    \item Además: $\log'(x)=\dfrac{1}{x}>0$ \quad $\forall x\in\R^+$
+  \end{itemize}
+  Entonces la función $\exp=\log^{-1}\colon\R\to\R^+$ es derivable y:
+  \[
+    \exp'(x)=(\log^{-1})'(x)=\frac{1}{\log'\bigl(\exp(x)\bigr)}
+    =\frac{1}{1/\exp x}=\exp(x)
+  \]
+\end{ejemplo}
+
+\begin{observacion}
+  Dado $\alpha\in\R$, se define $f(x)=x^\alpha=e^{\alpha\log x}$ \quad
+  (si $x>0$)
+
+  Entonces:
+  \begin{align*}
+    (x^\alpha)'&=\exp'(\alpha\log x)\times(\alpha\log x)'
+      =\exp(\alpha\log x)\times\frac{\alpha}{x}=\\
+    &=x^\alpha\cdot\frac{\alpha}{x}=\alpha\cdot x^\alpha\cdot x^{-1}
+      =\alpha\cdot x^{\alpha-1}\qquad\text{si } x>0
+  \end{align*}
+\end{observacion}
+
+\begin{observacion}
+  $f(x)=\sqrt[n]{x}=x^{\frac{1}{n}}$ \quad $(x>0)$
+  \[
+    f'(x)=\frac{1}{n}\,x^{\frac{1}{n}-1}=\frac{1}{n}\,x^{\frac{1-n}{n}}
+  \]
+  Caso particular $n=2$
+  \[
+    f(x)=\sqrt{x}=x^{\frac12}\qquad
+    f'(x)=\frac12\,x^{-\frac12}=\frac{1}{2\sqrt{x}}\qquad\forall x>0
+  \]
+\end{observacion}
+
+\begin{ejemplo}
+  Sea $f(x)=\sen(x)$ en $I=[-\pi/2,\pi/2]$
+  \begin{itemize}
+    \item $f$ es estrictamente creciente en $I=[-\pi/2,\pi/2]$, entonces
+      define una biyección entre $I$ y su imagen $f(I)=[-1,1]$
+    \item Sea $\arcsen:=f^{-1}\colon[-1,1]\to[-\pi/2,\pi/2]$
+
+      $\arcsen$ es continua en $[-1,1]$
+    \item $\forall x\in\left(-\frac{\pi}{2},\frac{\pi}{2}\right)$,
+      $f'(x)=\cos(x)>0$. Luego
+  \end{itemize}
+
+  % Gráficas agregadas a pedido (no están en la hoja).
+  \begin{center}
+  \begin{tikzpicture}
+    \begin{axis}[trig, axis equal image, title={$\sen x$ en $[-\frac{\pi}{2},\frac{\pi}{2}]$},
+        xmin=-1.9, xmax=1.9, ymin=-1.9, ymax=1.9,
+        xtick={-pi/2,pi/2}, xticklabels={$-\frac{\pi}{2}$,$\frac{\pi}{2}$}, ytick={-1,1}]
+      \addplot[thick, domain=-pi/2:pi/2] {sin(deg(x))};
+    \end{axis}
+  \end{tikzpicture}
+  \hspace{1cm}
+  \begin{tikzpicture}
+    \begin{axis}[trig, axis equal image, title={$\arcsen x$ en $[-1,1]$},
+        xmin=-1.9, xmax=1.9, ymin=-1.9, ymax=1.9,
+        xtick={-1,1}, ytick={-pi/2,pi/2}, yticklabels={$-\frac{\pi}{2}$,$\frac{\pi}{2}$}]
+      \addplot[thick, domain=-1:1, samples=200] {rad(asin(x))};
+    \end{axis}
+  \end{tikzpicture}
+  \end{center}
+  $\forall x\in(-1,1)$
+  \begin{align*}
+    \arcsen'
+    &=\frac{1}{\sen'(\arcsen x)}=\frac{1}{\cos(\arcsen x)}=\\
+    &=\frac{1}{\sqrt{1-\sen^2(\arcsen x)}}=\frac{1}{\sqrt{1-x^2}}
+      \qquad\forall x\in(-1,1)
+  \end{align*}
+\end{ejemplo}
+
+\begin{ejemplo}
+  $f(x)=\cos x$ en $I=[0,\pi]$
+  \begin{itemize}
+    \item $f$ es estrictamente decreciente en $I=[0,\pi]$ y define una
+      biyección entre $I$ y $f(I)=[-1,1]$ cuya función inversa se escribe
+      $\arccos=f^{-1}\colon[-1,1]\to[0,\pi]$
+    \item $\arccos$ es estrictamente decreciente y continua en $[-1,1]$
+    \item Solo es derivable en $(-1,1)$
+  \end{itemize}
+
+  % Gráficas agregadas a pedido (no están en la hoja).
+  \begin{center}
+  \begin{tikzpicture}
+    \begin{axis}[trig, axis equal image, title={$\cos x$ en $[0,\pi]$},
+        xmin=-1.4, xmax=3.5, ymin=-1.4, ymax=3.5,
+        xtick={pi/2,pi}, xticklabels={$\frac{\pi}{2}$,$\pi$},
+        xticklabel style={anchor=north east}, ytick={-1,1}]
+      \addplot[thick, domain=0:pi] {cos(deg(x))};
+    \end{axis}
+  \end{tikzpicture}
+  \hspace{1cm}
+  \begin{tikzpicture}
+    \begin{axis}[trig, axis equal image, title={$\arccos x$ en $[-1,1]$},
+        xmin=-1.4, xmax=3.5, ymin=-1.4, ymax=3.5,
+        xtick={-1,1}, ytick={pi/2,pi},
+        yticklabels={$\frac{\pi}{2}$,$\pi$},
+        yticklabel style={anchor=west, xshift=0.1cm}]
+      \addplot[thick, domain=-1:1, samples=200] {rad(acos(x))};
+    \end{axis}
+  \end{tikzpicture}
+  \end{center}
+  \begin{align*}
+    \arccos'(x)&=\frac{1}{\cos'\bigl(\arccos(x)\bigr)}
+      =-\frac{1}{\sen\bigl(\arccos(x)\bigr)}
+      =-\frac{1}{\sqrt{1-\cos^2\bigl(\arccos(x)\bigr)}}=\\
+    &=-\frac{1}{\sqrt{1-x^2}}
+  \end{align*}
+\end{ejemplo}
+
+\begin{ejemplo}
+  $f(x)=\tan x$ en $\left(-\frac{\pi}{2},\frac{\pi}{2}\right)$
+
+  Sea $\arctan:=f^{-1}\colon\R\to\left(-\frac{\pi}{2},\frac{\pi}{2}\right)$
+
+  % Gráficas agregadas a pedido (no están en la hoja).
+  \begin{center}
+  \begin{tikzpicture}
+    \begin{axis}[trig, width=5.2cm, height=5.8cm,
+        title={$\tan x$ en $(-\frac{\pi}{2},\frac{\pi}{2})$},
+        xmin=-2.2, xmax=2.2, ymin=-3.5, ymax=3.5,
+        xtick={pi/2}, xticklabels={$\frac{\pi}{2}$},
+        xticklabel style={anchor=north west},
+        extra x ticks={-pi/2}, extra x tick labels={$-\frac{\pi}{2}$},
+        extra x tick style={xticklabel style={anchor=north east}},
+        ytick={-1,1}]
+      \addplot[thick, domain=-1.29:1.29] {tan(deg(x))};
+      \draw[dashed] (axis cs:-pi/2,-3.5) -- (axis cs:-pi/2,3.5);
+      \draw[dashed] (axis cs:pi/2,-3.5) -- (axis cs:pi/2,3.5);
+    \end{axis}
+  \end{tikzpicture}
+  \hspace{0.6cm}
+  \begin{tikzpicture}
+    \begin{axis}[trig, width=6.4cm, height=4.4cm, title={$\arctan x$ en $\R$},
+        xmin=-4.5, xmax=4.5, ymin=-2.2, ymax=2.2,
+        xtick={1}, extra x ticks={-1},
+        extra x tick style={xticklabel style={anchor=south}},
+        ytick={pi/2}, yticklabels={$\frac{\pi}{2}$},
+        yticklabel style={anchor=south east},
+        extra y ticks={-pi/2}, extra y tick labels={$-\frac{\pi}{2}$},
+        extra y tick style={yticklabel style={anchor=north east}}]
+      \addplot[thick, domain=-4.5:4.5] {rad(atan(x))};
+      \draw[dashed] (axis cs:-4.5,-pi/2) -- (axis cs:4.5,-pi/2);
+      \draw[dashed] (axis cs:-4.5,pi/2) -- (axis cs:4.5,pi/2);
+    \end{axis}
+  \end{tikzpicture}
+  \end{center}
+
+  Tenemos que $f'(x)=1+\tan^2(x)>0$
+
+  Luego:
+  \[
+    \arctan'(x)=\frac{1}{\tan'\bigl(\arctan(x)\bigr)}
+    =\frac{1}{1+\tan^2\bigl(\arctan(x)\bigr)}=\frac{1}{1+x^2}
+  \]
+\end{ejemplo}
+
+% =====================================================================
+% Sin fecha en la hoja.
+\clase{33}{}{Extremos relativos, Rolle y Lagrange}
+
+\subsection{Extremos relativos y derivada}
+
+\begin{definicion}
+  Sea $f\colon I\to\R$. Un punto $(x_0,f(x_0))$ es:
+  \begin{itemize}
+    \item[--] Un \emph{máximo relativo} de $f$ si
+      \[
+        \exists\,\delta>0,\ \forall x\in E(x_0,\delta)\cap I,\qquad
+        f(x)\leq f(x_0)
+      \]
+    \item[--] Un \emph{mínimo relativo} de $f$ si
+      \[
+        \exists\,\delta>0,\ \forall x\in E(x_0,\delta)\cap I,\qquad
+        f(x)\geq f(x_0)
+      \]
+  \end{itemize}
+
+  Además, se dice que $f$ tiene un máximo/mínimo/extremo relativo en
+  $x_0\in I$ cuando el punto $(x_0,f(x_0))$ es
+  máximo/mínimo/extremo relativo de $f$.
+\end{definicion}
+
+\begin{proposicion}
+  Sea $f\colon I\to\R$. Si $f$ tiene un extremo relativo en un punto
+  \underline{interior} $x_0\in\mathring{I}$, y si $f$ es derivable en
+  $x_0$, entonces $f'(x_0)=0$.
+\end{proposicion}
+
+\begin{demo}
+  Caso de un máximo relativo (el otro caso es análogo).
+
+  Como $(x_0,f(x_0))$ es máximo relativo, existe $\delta>0$ tal que
+  $f(x)\leq f(x_0)$ $\forall x\in E(x_0,\delta)\cap I$. Como
+  $x_0\in\mathring{I}$, se puede tomar $\delta>0$ suficientemente pequeño
+  para que $E(x_0,\delta)\subset I$; tenemos que
+  \[
+    \forall x\in\underbrace{[x_0-\delta,x_0+\delta]}_{\subset I},\qquad
+    f(x)\leq f(x_0)
+  \]
+  Como $f$ es derivable en $x_0$, el cociente incremental
+  $\dfrac{f(x)-f(x_0)}{x-x_0}$ tiene límites por la izquierda y por la
+  derecha en $x_0$, los cuales son iguales.
+
+  Se observa que
+  \[
+    \frac{f(x)-f(x_0)\ \ (\leq 0)}{x-x_0\ \ (>0)}\leq 0
+    \qquad\forall x\in(x_0,x_0+\delta]
+  \]
+  luego:
+  \[
+    \lim_{x\to x_0^+}
+    \frac{f(x)-f(x_0)}{x-x_0}\leq 0
+  \]
+  \[
+    \forall x\in[x_0-\delta,x_0)\qquad
+    \frac{f(x)-f(x_0)\ \ (\leq 0)}{x-x_0\ \ (<0)}\geq 0
+  \]
+  Luego:
+  \[
+    \lim_{x\to x_0^-}\frac{f(x)-f(x_0)}{x-x_0}\geq 0
+  \]
+  Por lo tanto:
+  \[
+    \left.\begin{aligned}
+      f'(x_0)&\leq 0\\
+      f'(x_0)&\geq 0
+    \end{aligned}\right\}
+    \Longrightarrow f'(x_0)=0
+  \]
+\end{demo}
+
+\begin{observacion}
+  \begin{enumerate}[label=(\arabic*)]
+    \item La Prop.\ no se cumple en general cuando $x_0$ es uno de los
+      extremos de $I$
+    \item Cuando $f'(x_0)$ no existe, no se puede deducir nada.
+    \item El recíproco no se cumple:
+      \[
+        f'(x_0)=0\ \not\Longrightarrow\ \text{extremo relativo}
+      \]
+  \end{enumerate}
+\end{observacion}
+
+\subsection{Teoremas de Rolle y Lagrange}
+
+\begin{lema}[Rolle]
+  Si $f\colon[a,b]\to\R$ es continua en $[a,b]$, derivable en $(a,b)$ y tal
+  que $f(a)=f(b)$, entonces existe $c\in(a,b)$ tal que $f'(c)=0$.
+\end{lema}
+
+\begin{demo}
+  Por el teorema de Weierstrass, existen $x_0,x_1\in[a,b]$ tales que
+  $\forall x\in[a,b]$,
+  \[
+    \underbrace{f(x_0)}_{=m}\leq \underset{\textstyle\leq}{f(x)}
+    \leq\underbrace{f(x_1)}_{M}
+  \]
+
+  \textit{Caso 1:} $m=M$
+
+  $f$ es constante: $f'(x)=0$ $\forall x\in(a,b)$: se toma $c$ cualquiera.
+
+  \textit{Caso 2:} $m<M$. Como $f(a)=f(b)$, hay al menos uno de los dos
+  puntos $x_0$ y $x_1$ en $(a,b)$.
+  \begin{itemize}
+    \item[--] Si $x_0\in(a,b)$, se toma $c:=x_0$, y tenemos que $f'(c)=0$
+    \item[--] Si $x_1\in(a,b)$, se toma $c:=x_1$, y
+      tenemos que $f'(c)=0$
+  \end{itemize}
+\end{demo}
+
+\begin{teorema}[del valor medio, de Lagrange]
+  Sea $f\colon[a,b]\to\R$ continua en $[a,b]$ y derivable en $(a,b)$.
+  Entonces, existe $c\in(a,b)$ tal que
+  \[
+    f'(c)=\frac{f(b)-f(a)}{b-a}
+  \]
+\end{teorema}
+
+\begin{demo}
+  Sea $\lambda:=\dfrac{f(b)-f(a)}{b-a}$
+
+  se define $g\colon[a,b]\to\R$ por
+  $g(x)=f(x)-\lambda(x-a)$
+
+  $g$ es continua en $[a,b]$ y derivable en $(a,b)$
+  \begin{align*}
+    g'(x)&=f'(x)-\lambda\\
+    g(a)&=f(a)-\lambda(a-a)=f(a)\\
+    g(b)&=f(b)-\lambda(b-a)=f(b)-\bigl(f(b)-f(a)\bigr)=f(a)
+  \end{align*}
+  Por el lema de Rolle, existe $c\in(a,b)$ tal que $g'(c)=0$.
+
+  Entonces $f'(c)=g'(c)+\lambda=\lambda$
+
+  \begin{center}
+  \begin{tikzpicture}[scale=0.62,
+      declare function={
+        hh(\x)=0.9*sin(deg(pi*\x/2))*(1-\x/9);
+        ff(\x)=1+0.2*\x+hh(\x);}]
+    \def\c{0.9498}
+    % ----- f -----
+    \draw (0,0) -- (0,3.6);
+    \draw (6,0) -- (6,3.6);
+    \draw[thick,domain=0:6,samples=80,smooth] plot (\x,{ff(\x)});
+    \draw (0,1) -- (6,2.2);                                   % (AB)
+    \draw[dashed] (-0.3,{ff(\c)-0.2*(\c+0.3)}) -- (6,{ff(\c)+0.2*(6-\c)}); % T_c
+    \draw[dashed] (\c,{ff(\c)}) -- (\c,0.2);
+    \fill (0,1) circle (2pt) node[below right] {$A$};
+    \fill (6,2.2) circle (2pt) node[below left] {$B$};
+    \node[left] at (0,1) {$f(a)$};
+    \node[right] at (6,2.2) {$f(b)$};
+    \node[above] at (\c,{ff(\c)+0.2}) {$T_c$};
+    \node[below] at (0,0) {$a$};
+    \node[below] at (\c,0.2) {$c$};
+    \node[below] at (6,0) {$b$};
+    \node at (8.8,3.4) {$T_c\parallel(AB)$};
+    \draw[-{Stealth}] (7.3,1.2) -- (8.3,1.2);
+    % ----- g -----
+    \begin{scope}[xshift=11.2cm,yshift=-1.6cm]
+      \draw (0,0) -- (0,3.6);
+      \draw (6,0) -- (6,3.6);
+      \draw (0,1) -- (6,1);
+      \draw[thick,domain=0:6,samples=80,smooth] plot (\x,{1+hh(\x)});
+      \draw[dashed] (0,{1+hh(\c)}) -- (6,{1+hh(\c)});
+      \draw[dashed] (\c,{1+hh(\c)}) -- (\c,1);
+      \fill (0,1) circle (2pt);
+      \fill (6,1) circle (2pt);
+      \node[left] at (0,1) {$g(a)=f(a)$};
+      \node[right] at (6,1) {$g(b)=f(a)$};
+      \node[below] at (\c,1) {$c$};
+    \end{scope}
+  \end{tikzpicture}
+  \end{center}
+\end{demo}
+
+\subsection{Monotonía y signo de la derivada}
+
+\begin{proposicion}
+  Sea $f\colon[a,b]\to\R$ continua en $[a,b]$ y derivable en $(a,b)$.
+
+  Entonces:
+  \begin{enumerate}[label=(\arabic*)]
+    \item $f$ es monótona creciente en $[a,b]$
+      \[
+        \iff\forall x\in(a,b),\ f'(x)\geq 0
+      \]
+    \item $f$ es monótona decreciente en $[a,b]$
+      \[
+        \iff\forall x\in(a,b),\ f'(x)\leq 0
+      \]
+    \item $f$ es constante $\iff\forall x\in(a,b),\ f'(x)=0$
+  \end{enumerate}
+\end{proposicion}
+
+% La demostración queda incompleta en la hoja (sigue en la próxima clase):
+% se quita el símbolo de fin de demostración.
+\begin{demo}[Demostración de (1)]
+  ($\Rightarrow$) Supongamos que $f$ monótona creciente. Sea
+  $x_0\in(a,b)$.
+
+  Se observa que
+  \[
+    \frac{f(x)-f(x_0)}{x-x_0}
+  \]
+  \renewcommand{\qedsymbol}{}
+\end{demo}
+
+% =====================================================================
+% Sin fecha en la hoja.
+\clase{34}{}{Monotonía, Cauchy y l'Hôpital}
+
+\subsection{Rolle y Lagrange}
+
+\begin{lema}[Rolle]\leavevmode
+  \begin{itemize}
+    \item $f$ continua en $[a,b]$ y derivable en $(a,b)$
+    \item $f(a)=f(b)$
+  \end{itemize}
+  Entonces existe $c\in(a,b)$ tal que $f'(c)=0$
+\end{lema}
+
+\begin{teorema}[del valor medio de Lagrange]\leavevmode
+  \begin{itemize}
+    \item $f$ continua en $[a,b]$ y derivable en $(a,b)$:
+  \end{itemize}
+  Entonces existe $c\in(a,b)$ tal que
+  \[
+    f'(c)=\frac{f(b)-f(a)}{b-a}
+  \]
+\end{teorema}
+
+\subsection{Monotonía y signo de la derivada}
+
+\begin{proposicion}
+  Si $f$ es continua en $[a,b]$ y derivable $(a,b)$:
+  \begin{enumerate}[label=(\arabic*)]
+    \item $\bigl(\forall x\in(a,b),\ f(x)'\geq 0\bigr)\iff f$ monótona creciente.
+    \item $\bigl(\forall x\in(a,b),\ f(x)'\leq 0\bigr)\iff f$ monótona decreciente.
+    \item $\bigl(\forall x\in(a,b),\ f(x)'=0\bigr)\iff f$ constante.
+  \end{enumerate}
+\end{proposicion}
+
+\begin{proposicion}
+  Si $f$ es continua en $[a,b]$ y derivable en $(a,b)$:
+  \begin{enumerate}[label=(\arabic*)]
+    \item $\bigl(\forall x\in(a,b),\ f'(x)>0\bigr)\Rightarrow f$ estrictamente creciente
+    \item $\bigl(\forall x\in(a,b),\ f'(x)<0\bigr)\Rightarrow f$ estrictamente decreciente
+  \end{enumerate}
+\end{proposicion}
+
+\begin{demo}[Demostración de (1)]
+  Supongamos que $\forall x\in(a,b)$, $f'(x)>0$
+
+  Sean $x_0,x_1\in[a,b]$ tales que $x_0<x_1$
+
+  Se trata de mostrar que $f(x_0)<f(x_1)$
+
+  Por Lagrange (aplicado al intervalo $[x_0,x_1]$) existe
+  $c\in(x_0,x_1)$ tal que
+  \[
+    \frac{f(x_1)-f(x_0)}{x_1-x_0}=f'(c)>0
+  \]
+  Multiplicando por $x_1-x_0>0$, obtenemos que
+  \[
+    f(x_1)-f(x_0)>0,\quad\text{es decir: } f(x_0)<f(x_1).
+  \]
+\end{demo}
+
+\begin{ejemplo}
+  $f(x)=x^3$ en $\R$
+
+  $f$ es estrictamente creciente en $\R$
+
+  Pero $f'(x)=3x^2=0$ si $x=0$.
+\end{ejemplo}
+
+\begin{ejemplo}
+  \[
+    f(x)=x-\sen(x)\ \text{ en } \R
+  \]
+  \[
+    f'(x)=1-\cos(x)\geq 0
+  \]
+  $\Rightarrow f$ es monótona creciente
+
+  Dado $x\in\R$, tenemos que
+  \begin{align*}
+    f'(x)=0&\iff\cos(x)=1\\
+    &\iff\exists\,k\in\Z,\ x=2k\pi
+  \end{align*}
+  Estudiemos $f$ en $[2k\pi,2(k+1)\pi]$
+
+  tenemos que $f'(x)>0$ en $(2k\pi,2(k+1)\pi)$
+
+  Por la Prop anterior, $f$ es estrictamente creciente en cada intervalo
+  $[2k\pi,2(k+1)\pi]$
+
+  Luego: $f$ es estrictamente creciente en $\R$.
+
+  \begin{center}
+  \begin{tikzpicture}[scale=0.22]
+    \draw (-10.5,0) -- (10.5,0);
+    \draw (0,-10.5) -- (0,10.5);
+    \draw[thick,domain=-9.6:9.6,samples=150,smooth]
+      plot (\x,{\x-sin(deg(\x))});
+  \end{tikzpicture}
+  \end{center}
+\end{ejemplo}
+
+\begin{corolario}
+  Si $f$ es (continua y) derivable en $I\subseteq\R$
+  \begin{itemize}
+    \item $(\forall x\in I,\ f'(x)\geq 0)\iff f$ creciente
+    \item $(\forall x\in I,\ f'(x)\leq 0)\iff f$ decreciente
+    \item $(\forall x\in I,\ f'(x)=0)\iff f$ constante
+    \item $(\forall x\in I,\ f'(x)>0)\Rightarrow f$ estrictamente creciente
+    \item $(\forall x\in I,\ f'(x)<0)\Rightarrow f$ estrictamente decreciente
+  \end{itemize}
+\end{corolario}
+
+\subsection{Teorema de Cauchy}
+
+\begin{teorema}[Cauchy]
+  Sean $f,g\colon[a,b]\to\R$ continua en $[a,b]$ y derivable en $(a,b)$.
+
+  Entonces existe $c\in(a,b)$ tal que
+  \[
+    f'(c)\bigl(g(b)-g(a)\bigr)=g'(c)\bigl(f(b)-f(a)\bigr)
+  \]
+\end{teorema}
+
+\begin{observacion}
+  En el caso particular donde
+  \begin{itemize}
+    \item[--] o bien $g'(x)>0$ $\forall x\in(a,b)$ \ ($g$ estrictamente creciente)
+    \item[--] o bien $g'(x)<0$ $\forall x\in(a,b)$ \ ($g$ estrictamente decreciente)
+  \end{itemize}
+  La expresión anterior es equivalente a
+  \[
+    \frac{f'(c)}{g'(c)}=\frac{f(b)-f(a)}{g(b)-g(a)}
+  \]
+\end{observacion}
+
+\begin{demo}
+  Sea $h\colon[a,b]\to\R$ definido por:
+  \[
+    h(x)=f(x)\bigl(g(b)-g(a)\bigr)-g(x)\bigl(f(b)-f(a)\bigr)
+  \]
+  \begin{itemize}
+    \item $h$ es continua en $[a,b]$ y derivable en $(a,b)$
+    \item $h'(x)=f'(x)\bigl(g(b)-g(a)\bigr)-g'(x)\bigl(f(b)-f(a)\bigr)$
+    \item $\begin{aligned}[t]
+        h(a)&=f(a)\bigl(g(b)-g(a)\bigr)-g(a)\bigl(f(b)-f(a)\bigr)\\
+        &=f(a)g(b)-g(a)f(b)
+      \end{aligned}$
+    \item $\begin{aligned}[t]
+        h(b)&=f(b)\bigl(g(b)-g(a)\bigr)-g(b)\bigl(f(b)-f(a)\bigr)\\
+        &=f(a)g(b)-g(a)f(b)=h(a)
+      \end{aligned}$
+  \end{itemize}
+  Por el lema de Rolle, existe $c\in(a,b)$ tal que:
+  \[
+    h'(c)=0=f'(c)\bigl(g(b)-g(a)\bigr)-g'(c)\bigl(f(b)-f(a)\bigr)
+  \]
+\end{demo}
+
+\subsection{Aplicación: Regla de l'Hôpital}
+
+\textit{Recordatorio:} Cuando
+$\displaystyle\lim_{x\to a}f(x)=\lim_{x\to a}g(x)=0$ no se puede decir
+nada sobre $f/g$:
+\[
+  \frac{f(x)}{g(x)}\longrightarrow\ ?
+\]
+
+\begin{teorema}[Regla de l'Hôpital]
+  Sean $f,g$ dos funciones tales que:
+  \begin{itemize}
+    \item[--] $f,g$ son definidas y derivables en $(a,a+\delta)$
+      \ (con $a\in\R$, $\delta>0$)
+    \item[--] $\displaystyle\lim_{x\to a^+}f=\lim_{x\to a^+}g=0$
+    \item[--] $g'(x)\neq 0$ \ $\bigl(\forall x\in(a,a+\delta)\bigr)$
+    \item[--] Existe $\displaystyle\lim_{x\to a^+}\frac{f'}{g'}=\lambda\in\R$
+  \end{itemize}
+  Entonces: $g(x)\neq 0$ $\forall x\in(a,a+\delta)$ y
+  \[
+    \lim_{x\to a^+}\frac{f(x)}{g(x)}=\lambda
+    \quad\left(=\lim_{x\to a^+}\frac{f'(x)}{g'(x)}\right)
+  \]
+\end{teorema}
+
+\subsubsection*{Variante por la izquierda}
+
+\begin{itemize}
+  \item[--] $f,g$ son definidas y derivable en $(a-\delta,a)$
+  \item[--] $\displaystyle\lim_{x\to a^-}f=\lim_{x\to a^-}g=0$
+  \item[--] $g'(x)\neq 0$
+  \item[--] Existe $\displaystyle\lim_{x\to a^-}\frac{f'}{g'}=\lambda$
+\end{itemize}
+Entonces: $g(x)\neq 0$ $\forall x\in(a-\delta,a)$
+\[
+  \lim_{x\to a^-}\frac{f(x)}{g(x)}=\lambda
+\]
+
+\subsubsection*{Variante bilateral}
+
+\begin{itemize}
+  \item[--] $f,g$ definido y derivable en $E^*(a,\delta)$
+  \item[--] $\displaystyle\lim_{x\to a}f=\lim_{x\to a}g=0$
+  \item[--] $g'$ no se anula en $E^*(a,\delta)$
+  \item[--] Existe $\displaystyle\lim_{x\to a}\frac{f'}{g'}=\lambda\in\R$
+\end{itemize}
+
+\begin{ejemplo}
+  Estudiar el límite
+  \[
+    \lim_{x\to 0}\frac{e^x-1-x}{x^2}
+  \]
+  \[
+    \left.\begin{aligned}
+      f(x)&:=e^x-1-x\\
+      g(x)&:=x^2
+    \end{aligned}\right.
+    \qquad\left(\lim_{x\to 0}f=\lim_{x\to 0}g=0\right)
+  \]
+  \begin{align*}
+    f'(x)&=e^x-1\\
+    g'(x)&=2x \qquad g'\neq 0 \text{ en } \R\setminus\{0\}
+  \end{align*}
+  \[
+    \lim_{x\to 0}\frac{f'}{g'}=\frac12\lim_{x\to 0}\frac{e^x-1}{x}
+    \left(=\frac{e^x-e^0}{x-0}\right)=\frac12\exp'(0)=\frac12
+  \]
+  Por lo tanto:
+  \[
+    \lim_{x\to 0}\frac{e^x-1-x}{x^2}=\frac12
+  \]
+\end{ejemplo}
+
+% =====================================================================
+% Sin fecha en la hoja.
+\clase{35}{}{l'Hôpital y Teorema Fundamental}
+
+\subsection{Regla de l'Hôpital}
+
+\begin{teorema}[Formulación bilateral]\leavevmode
+  \begin{itemize}
+    \item $f,g$ definidas y derivables en $E^*(a,\delta)$ \quad $(\delta>0)$
+    \item $\displaystyle\lim_{x\to a}f(x)=\lim_{x\to a}g(x)=0$
+    \item $\forall x\in E^*(a,\delta)$, $g'(x)\neq 0$
+    \item $\displaystyle\exists\lim_{x\to a}\frac{f'(x)}{g'(x)}$ \quad $(=\lambda\in\R)$
+  \end{itemize}
+  Entonces
+  \[
+    \lim_{x\to a}\frac{f(x)}{g(x)}=\lambda
+  \]
+  (y además: $\forall x\in E^*(a,\delta)$, $g(x)\neq 0$)
+\end{teorema}
+
+Se pueden remplazar:
+\begin{itemize}
+  \item[--] $E^*(a,\delta)$ y $x\mapsto a$ por
+  \item[] o bien $(a,a+\delta)$ y $x\to a^+$
+  \item[] o bien $(a-\delta,a)$ y $x\to a^-$
+\end{itemize}
+
+\begin{demo}
+  Como
+  \[
+    \lim_{x\to a^+}f(x)=\lim_{x\to a^+}g(x)=0
+  \]
+  y $f,g$ son continuas en $(a,a+\delta)$ se pueden extender ``por
+  continuidad'' $f$ y $g$ en $a$ por $f(a)=g(a)=0$. Ahora
+  $f,g\colon[a,a+\delta)\to\R$ son continuas.
+
+  Sea $x\in(a,a+\delta)$ fijados.
+  \begin{itemize}
+    \item Aplicando el teorema de Lagrange en $[a,x]$, existe
+      $x'\in(a,x)$ tal que
+      \[
+        \frac{g(x)-g(a)}{x-a}=\frac{g(x)}{x-a}=g'(x')\neq 0.
+      \]
+      Luego $g(x)\neq 0$
+    \item Aplicando el teorema de Cauchy a $f$ y $g$ en $[a,x]$ existe
+      $c_x\in(a,x)$ tal que
+      \begin{align*}
+        f'(c_x)\bigl(g(x)-g(a)\bigr)&=g'(c_x)\bigl(f(x)-f(a)\bigr)\\
+        f'(c_x)\underbrace{g(x)}_{\neq 0}&=\underbrace{g'(c_x)}_{\neq 0}f(x)
+      \end{align*}
+      \[
+        \frac{f(x)}{g(x)}=\frac{f'(c_x)}{g'(c_x)}
+      \]
+  \end{itemize}
+  \[
+    \begin{array}{rl|l}
+      h\colon(a,a+\delta) & \longmapsto(a,a+\delta) &
+        \ \forall x\in(a,a+\delta)\\
+      x & \longmapsto h(x)=c_x &
+        \ a<\underset{\substack{\|\\ c_x}}{h(x)}<x
+    \end{array}
+  \]
+  Por Sandwich: $\displaystyle\lim_{x\to a^+}h(x)=a$
+  \[
+    \frac{f(x)}{g(x)}=\frac{f'(h(x))}{g'(h(x))}
+    \xrightarrow[x\to a^+]{}\lambda
+    \quad\text{(Por composición de límites)}
+  \]
+\end{demo}
+
+\begin{ejemplo}
+  \[
+    \lim_{x\to 0}\frac{\overbrace{\cos x-1}^{=f(x)}}{\underbrace{x^2}_{=g(x)}}
+    =-\frac12
+  \]
+  \[
+    \begin{aligned}
+      f'(x)&=-\sen(x)\\
+      g'(x)&=2x
+    \end{aligned}
+    \qquad
+    \lim_{x\to 0}\frac{-\sen(x)}{2x}=-\frac12
+    \quad\left(\text{Pues }\lim_{x\to 0}\frac{\sen x}{x}=1\right)
+  \]
+  \[
+    \begin{aligned}
+      f''(x)&=-\cos x\\
+      g''(x)&=2
+    \end{aligned}
+    \qquad
+    \lim_{x\to 0}\frac{-\cos x}{2}=-\frac12
+  \]
+\end{ejemplo}
+
+\subsection{Teorema Fundamental del cálculo}
+
+\begin{teorema}[Fundamental del cálculo]
+  Sean $f\colon I\to\R$ una función localmente integrable en $I$ y un
+  punto $a\in I$. Se considera la función
+  \[
+    F(x)=\int_a^x f(t)\dd t\qquad(\forall x\in I)
+  \]
+  \begin{enumerate}[label=(\arabic*)]
+    \item $F\colon I\to\R$ siempre es continua
+    \item En todo punto $x\in I$ donde $f$ es continua la función $F$ es
+      derivable, y $F'(x)=f(x)$
+  \end{enumerate}
+\end{teorema}
+
+
+\begin{demo}[Demostración de (2)]
+  Sea $x_0\in I$ donde $f$ es continua.
+
+  Se trata de mostrar que
+  \[
+    \lim_{x\to x_0}\frac{F(x)-F(x_0)}{x-x_0}=f(x_0)
+  \]
+  Sea $\varepsilon>0$. Como $f$ es continua en $x_0$, existe $\delta>0$
+  tal que
+  \[
+    \forall x\in I\quad\abs{x-x_0}<\delta\Rightarrow
+    \abs{f(x)-f(x_0)}<\varepsilon
+  \]
+  Sea $x$ tal $\abs{x-x_0}<\delta$; tenemos que
+  \begin{align*}
+    F(x)-F(x_0)-f(x_0)\cdot(x-x_0)
+    &=\int_a^x f(t)\dd t-\int_a^{x_0}f(t)\dd t-\int_{x_0}^x f(x_0)\dd t\\
+    &=\int_{x_0}^x f(t)\dd t-\int_{x_0}^x f(x_0)\dd t
+     =\int_{x_0}^x\bigl(f(t)-f(x_0)\bigr)\dd t
+  \end{align*}
+
+  \begin{align*}
+    \abs{F(x)-F(x_0)-f(x_0)(x-x_0)}
+    &=\abs*{\int_{x_0}^x\bigl(f(t)-f(x_0)\bigr)\dd t}
+     \leq\int_{x_0}^x\abs{f(t)-f(x_0)}\dd t\\
+    &\leq\varepsilon\abs{x-x_0}
+  \end{align*}
+  Luego, cuando $x\in E(x_0,\delta)$:
+  \[
+    \abs*{\frac{F(x)-F(x_0)}{x-x_0}-f(x_0)}
+    \leq\frac{\varepsilon\cancel{\abs{x-x_0}}}{\cancel{\abs{x-x_0}}}
+  \]
+\end{demo}
+
+\begin{corolario}
+  Si $f\colon I\to\R$ es continua, entonces
+  \[
+    F(x)=\int_a^x f(t)\dd t\quad\text{es derivable en } I,\ \text{y } F'=f
+  \]
+  Dicho de otro modo: $F$ es una primitiva de $f$.
+\end{corolario}
+
+\begin{definicion}
+  $g$ es una \emph{primitiva} de $f$
+  cuando $g$ es derivable y $g'=f$
+\end{definicion}
+
+\begin{corolario}
+  Toda función continua $f$ tiene una primitiva, dada
+  \[
+    F(x)=\int_a^x f(t)\dd t
+  \]
+\end{corolario}
+
+% =====================================================================
+% Sin fecha en la hoja.
+\clase{36}{}{Problema de extremos: la copa}
+
+\subsection{Extremos}
+
+\begin{ejemplo}
+  Una copa de vermouth tiene la forma de un (medio) cono
+
+  Se trabaja con una cantidad fija de cristal, determinada por el área
+  lateral $A_0$
+
+  Se trata de maximizar el volumen.
+
+  \begin{minipage}[c]{0.55\textwidth}
+    \begin{align*}
+      A_0&=\pi r g\\
+      V&=\frac13\pi r^2 h\\
+      g^2&=r^2+h^2
+    \end{align*}
+  \end{minipage}%
+  \begin{minipage}[c]{0.4\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=0.8]
+      \draw (0,0) ellipse (1.4 and 0.35);
+      \draw (-1.4,0) -- (0,-2.6) -- (1.4,0);
+      \draw[dashed] (0,0) -- (0,-2.6);
+      \draw (0,0) -- (1.4,0);
+      \node[above] at (0.7,0) {$r$};
+      \node[left] at (0,-1.2) {$h$};
+      \node[right] at (0.75,-1.35) {$g$};
+      \draw (0,-1.9) arc (90:61.7:0.7);
+      \node at (0.18,-1.65) {\footnotesize$\alpha$};
+    \end{tikzpicture}
+  \end{minipage}
+
+  Una constante $A_0$ \qquad $r>0$, \ $h\geq 0$, \ $g>0$
+
+  Cantidades variables: $r,h,g$, \ $V=V(r)$
+  \begin{align*}
+    g&=\frac{A_0}{\pi r}\\
+    h^2&=g^2-r^2\Rightarrow h=\sqrt{g^2-r^2}
+      =\sqrt{\frac{A_0^2}{\pi^2r^2}-r^2}
+  \end{align*}
+
+  tenemos que asegurarnos que:
+  \begin{align*}
+    \frac{A_0^2}{\pi^2r^2}-r^2\geq 0
+    &\iff\frac{A_0^2}{\pi^2r^2}\geq r^2
+     \iff\frac{A_0^2}{\pi^2}\geq r^4\\
+    &\iff r^2\leq\frac{A_0}{\pi}\iff r\leq\sqrt{\frac{A_0}{\pi}}
+  \end{align*}
+
+  \textit{Intervalo de definición}
+  \[
+    r\in\left(0,\sqrt{\frac{A_0}{\pi}}\,\right]
+  \]
+  \[
+    V=\frac13\pi r^2h=\frac13\pi r^2\sqrt{\frac{A_0^2}{\pi^2r^2}-r^2}
+    =\frac13 r\sqrt{A_0^2-\pi^2r^4}
+  \]
+
+  \begin{lema}
+    $f\geq 0$ alcanza un mínimo/\allowbreak máximo/\allowbreak extremo en
+    $x_0$ sii $f^2$ alcanza un mínimo/\allowbreak máximo/\allowbreak extremo
+    en el mismo punto.
+  \end{lema}
+
+  \begin{align*}
+    V^2&=\frac19 r^2\cdot\bigl(A_0^2-\pi^2r^4\bigr)
+        =\frac19\bigl[A_0^2r^2-\pi^2r^6\bigr]\\
+    (V^2)'&=\frac19\bigl[2A_0^2r-6\pi^2r^5\bigr]\\
+    &=\frac19 r\bigl[2A_0^2-6\pi^2r^4\bigr]
+  \end{align*}
+  \begin{align*}
+    (V^2)'=0
+    &\iff\underbrace{r=0}_{\substack{\text{caso imposible}\\
+      \text{afuera del dominio}}}\ \lor\ 6\pi^2r^4=2A_0^2\\
+    &\iff 6\pi^2r^4=2A_0^2
+  \end{align*}
+  \begin{align*}
+    (V^2)'=0&\iff r^4=\frac{A_0^2}{3\pi^2}\\
+    &\iff r^2=\frac{A_0}{\pi\sqrt3}\\
+    &\iff r=\underbrace{\sqrt{\frac{A_0}{\pi\sqrt3}}}_{>0}
+      \qquad\left(\leq\sqrt{\frac{A_0}{\pi}}\right)
+  \end{align*}
+  \[
+    r_0=\sqrt{\frac{A_0}{\pi\sqrt3}}\in\left(0,\sqrt{\frac{A_0}{\pi}}\,\right]
+  \]
+  $V$ es maximal cuando $\displaystyle r=r_0=\sqrt{\frac{A_0}{\pi\sqrt3}}$
+\end{ejemplo}
+
+% =====================================================================
+\end{document}

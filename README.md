@@ -23,6 +23,7 @@ apuntes-fing/
 |---|------|-----|
 | 01 | Números complejos | [PDF](GAL-1/01-numeros-complejos/numeros-complejos.pdf) |
 | 02 | Sistemas, matrices y determinantes | [PDF](GAL-1/02-sistemas-matrices-determinantes/sistemas-matrices-determinantes.pdf) |
+| 03 | Rectas y planos en el espacio | [PDF](GAL-1/03-rectas-y-planos/rectas-y-planos.pdf) |
 
 ### [CDIV](CDIV/) — Cálculo Diferencial e Integral en una Variable
 
@@ -30,6 +31,7 @@ apuntes-fing/
 |---|------|-----|
 | 01 | Integrales | [PDF](CDIV/01-integrales/integrales.pdf) |
 | 02 | Límites y continuidad | [PDF](CDIV/02-limites-y-continuidad/limites-y-continuidad.pdf) |
+| 03 | Derivadas | [PDF](CDIV/03-derivadas/derivadas.pdf) |
 
 ## Compilar
 

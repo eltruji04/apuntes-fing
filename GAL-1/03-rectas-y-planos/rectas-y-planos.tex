@@ -1,0 +1,893 @@
+% =====================================================================
+%  rectas-y-planos.tex — Unidad: Rectas y planos en el espacio
+%  Requiere apuntes.sty (estilo/ en la raíz del repo; ver README).
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+\usepackage{apuntes}
+
+% ---------- Macros propias de esta materia (solo si hacen falta) ----------
+\DeclareMathOperator{\Sol}{Sol}
+\DeclareMathOperator{\dir}{dir}
+\DeclareMathOperator{\dist}{dist}
+
+% ---------- Metadatos ----------
+\materia{GAL 1}
+\curso{Teórico}
+\unidad{Rectas y planos en el espacio}
+\periodo{Clases 12 a 16 --- 2026}
+\hypersetup{pdfauthor={Santiago Trujillo}}
+
+\begin{document}
+\maketitle
+\vspace{-1.6em}
+\begin{center}
+  {\normalsize Santiago Trujillo\par}
+\end{center}
+\vspace{0.5em}
+\tableofcontents
+
+% =====================================================================
+%  CLASES — cada clase nueva se agrega AL FINAL, sin tocar las anteriores
+% =====================================================================
+
+\clase{12}{}{El espacio de las n-uplas}
+
+\subsection{\texorpdfstring{El espacio $\R^n$ de las $n$-uplas}{El espacio Rn de las n-uplas}}
+
+\begin{definicion}
+Dado $n\geq1$, se llama $n$-upla de reales toda sucesión finita $(x_1,\dots,x_n)$ donde $x_1,\dots,x_n\in\R$.
+
+Se escribe $\R^n$ el conjunto de las $n$-uplas de reales.
+\end{definicion}
+
+El espacio $\R^n$ tiene la misma estructura que el espacio de las matrices columnas ($:n\times1$) o de las matrices filas ($:1\times n$).
+
+Como para las matrices, se pueden definir:
+\begin{itemize}
+  \item la suma:
+  \begin{align*}
+  &(x_1,\dots,x_n)+(y_1,\dots,y_n)\\
+  &=(x_1+y_1,\dots,x_n+y_n)
+  \end{align*}
+  \item la $n$-upla nula: $\vec0=\underbrace{(0,\dots,0)}_{n\text{ veces}}$
+
+  la opuesta: $-(x_1,\dots,x_n)=(-x_1,\dots,-x_n)$
+  \item el producto de un número por una $n$-upla:
+  \[
+  \lambda\cdot(x_1,\dots,x_n)=(\lambda x_1,\dots,\lambda x_n)
+  \]
+\end{itemize}
+
+Propiedades: Para todos $u,v,w\in\R^n$.
+\begin{align*}
+&(u+v)+w=u+(v+w)\\
+&u+v=v+u\\
+&u+\vec0=\vec0+u\\
+&u+(-u)=(-u)+u=\vec0\\
+&0\cdot u=\vec0\\
+&1\cdot u=\vec u\\
+&(-1)\cdot u=-\vec u\\
+&(\lambda\mu)\cdot u=\lambda(\mu\cdot u)\\
+&(\lambda+\mu)\cdot u=\lambda\cdot u+\mu\cdot u\\
+&\lambda(u+v)=\lambda u+\lambda v
+\end{align*}
+% DUDA: pág. 6 del escaneo, "u + 0 = 0 + u" queda sin "= u" al final.
+
+Se dice que $\R^n$ es un espacio vectorial.
+
+\subsection{\texorpdfstring{El espacio $\R^3$}{El espacio R3}}
+
+A través de un sistema fijado de coordenadas se identifica el «espacio ambiente» con $\R^3$
+\[
+E=\R^3
+\]
+
+\begin{observacion}
+Cada 3-upla puede representar
+\begin{itemize}
+  \item O bien un punto $A\in\R^3$
+  \item O bien un vector $u\in\R^3$
+\end{itemize}
+\end{observacion}
+
+Además las operaciones sobre $\R^3$ corresponden a las operaciones «geométricas» sobre los puntos y vectores:
+\begin{itemize}
+  \item $u+v$ (suma de 2 vectores)
+  \item $\vec0=(0,0,0)$
+  \item $-\vec u=$ % En el escaneo (pág. 7) queda sin completar.
+  \item $\lambda\cdot\vec u$
+  \item $A+u$
+  \item $B-A=\overrightarrow{AB}$
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[>={Stealth}]
+  \draw[->] (0,0) -- (3,0.8) node[midway,above] {$v$};
+  \draw[->] (0,0) -- (2,-0.9) node[midway,below] {$u$};
+  \draw[->] (2,-0.9) -- (5,-0.1);
+  \draw[->] (3,0.8) -- (5,-0.1);
+  \draw[->] (0,0) -- (5,-0.1) node[pos=0.55,above] {$u+v$};
+  \begin{scope}[xshift=7.5cm]
+    \fill (0,-0.3) circle (1.5pt) node[below] {$A$};
+    \draw[->] (0,-0.3) -- (2.5,-0.1) node[midway,above] {$u$};
+    \node at (2.6,-0.75) {$B=A+u$};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+% =====================================================================
+\clase{13}{}{Rectas en el espacio}
+
+\subsection{\texorpdfstring{El espacio $\R^3$}{El espacio R3}}
+
+\subsubsection*{Vectores colineales y puntos alineados}
+
+\begin{definicion}
+Dos vectores $u,v\in\R^3$ son colineales cuando existe $\lambda\in\R$ tal que $u=\lambda\cdot v$ \underline{o} $v=\lambda\cdot u$
+\end{definicion}
+
+\begin{observacion}
+El «o» está para tener en cuenta el caso donde uno de los vectores es nulo:
+\begin{itemize}
+  \item Si $u=\vec0$ y $v\neq\vec0$: \quad $u=0\cdot v$ \quad pero \quad $v\neq\lambda\cdot u$ \quad $(\forall\lambda)$
+  \item Si $u\neq\vec0$ y $v=\vec0$: \quad $v=0\cdot u$ \quad pero \quad $u\neq\lambda\cdot v$ \quad $(\forall\lambda)$
+  \item Si $u,v\neq\vec0$: \quad $v=\lambda\cdot u\iff u=\lambda^{-1}\cdot v$ \quad (pues $\lambda\neq0$)
+\end{itemize}
+\end{observacion}
+
+\begin{definicion}
+Tres puntos $A,B,C$ son alineados cuando $\overrightarrow{AB}$ y $\overrightarrow{AC}$ son colineales.
+\end{definicion}
+
+\begin{observacion}
+$A,B,C$ alineados
+\end{observacion}
+% En el escaneo (pág. 1) esta observación queda sin completar.
+
+\begin{definicion}
+Dados dos puntos $A,B\in\R^3$ tales que $A\neq B$, la recta $R$ que pasa por $A$ y $B$ es el conjunto de los puntos $X$ tales que $A$, $B$ y $X$ son alineados.
+\[
+X\in R\iff\overrightarrow{AX}\text{ y }\overrightarrow{AB}\text{ son colineales}
+\]
+\end{definicion}
+
+Se puede demostrar que
+\[
+X\in R\iff\underbrace{X=A+\lambda(B-A)}_{\substack{\text{ecuación vectorial}\\\text{de la recta } R\\\text{(no única)}}}\quad\text{para algún }\lambda\in\R.
+\]
+Escribiendo $A=(a_1,a_2,a_3)$, $B=(b_1,b_2,b_3)$ y $X=(x_1,x_2,x_3)$
+\[
+(x_1,x_2,x_3)\in R\iff
+\underbrace{\begin{cases}
+x_1=a_1+\lambda(b_1-a_1)\\
+x_2=a_2+\lambda(b_2-a_2)\\
+x_3=a_3+\lambda(b_3-a_3)
+\end{cases}}_{\substack{\text{Ecuación paramétrica de } R\\\text{(no es única)}}}
+\quad\text{para algún }\lambda\in\R
+\]
+
+
+\begin{definicion}
+Un vector director de una recta $R$ es cualquier vector $u$ de la forma $u=\overrightarrow{AB}$ $(=B-A)$ donde $A,B\in R$, $A\neq B$.
+\end{definicion}
+
+\begin{observacion}\leavevmode
+\begin{enumerate}[label=(\arabic*)]
+  \item Un vector director nunca es nulo
+  \item todos los vectores directores de una misma recta son colineales entre sí.
+  \item Si $u$ es un vector director de $R$, entonces $\lambda\cdot u$ es un vector director de $R$ para todo $\lambda\neq0$.
+\end{enumerate}
+\end{observacion}
+
+\begin{observacion}
+Una recta también se puede definir a partir de un punto $A$ y de un vector $u\neq0$.
+
+(Vectorial) \quad $X=A+\lambda u$ \quad para algún $\lambda\in\R$
+
+(Paramétrica)
+$\begin{cases}
+x_1=a_1+\lambda u_1\\
+x_2=a_2+\lambda u_2\\
+x_3=a_3+\lambda u_3
+\end{cases}$
+\quad para algún $\lambda\in\R$
+\end{observacion}
+
+\begin{definicion}
+Dos rectas son paralelas cuando tienen los mismos vectores directores.
+\end{definicion}
+
+\begin{observacion}\leavevmode
+\begin{enumerate}[label=(\arabic*)]
+  \item
+  \begin{align*}
+  R\parallel R'&\overset{\text{def}}{\iff}\dir(R)=\dir(R')\\
+  &\iff\dir(R)\cap\dir(R')\neq\emptyset
+  \end{align*}
+  \item Dos rectas paralelas que se encuentran en un punto son iguales.
+\end{enumerate}
+\end{observacion}
+
+\begin{ejemplo}\label{ej:recta}\leavevmode
+\begin{enumerate}[label=(\arabic*)]
+  \item $A=(1,1,1)$ y $B=(3,5,-5)$
+  \begin{align*}
+  X&=(1,1,1)+\lambda(2,4,-6)\qquad(\text{para algún }\lambda)\\
+  X&=(1,1,1)+\lambda(1,2,-3)
+  \end{align*}
+  \[
+  \begin{cases}
+  x_1=1+\lambda\\
+  x_2=1+2\lambda\\
+  x_3=1-3\lambda
+  \end{cases}
+  \qquad(\text{para algún }\lambda\in\R)
+  \]
+  \item $C=(0,-1,4)$ y $D=(1,4,-3)$ \qquad ¿$C,D\in R$?
+
+  ¿$C\in R$?
+  \[
+  \begin{cases}
+  0=1+\lambda\\
+  -1=1+2\lambda\\
+  4=1-3\lambda
+  \end{cases}
+  \qquad
+  \begin{array}{l}
+  \lambda=-1\\
+  2\lambda=-2\Rightarrow\lambda=-1\\
+  -3\lambda=3\Rightarrow\lambda=-1
+  \end{array}
+  \qquad\Sol(S)=\{-1\}
+  \]
+  Luego: $C\in R$.
+
+  ¿$D\in R$?
+  \[
+  \begin{cases}
+  1=1+\lambda\\
+  4=1+2\lambda\\
+  -3=1-3\lambda
+  \end{cases}
+  \qquad
+  \begin{array}{l}
+  \Rightarrow\lambda=0\\
+  \Rightarrow2\lambda=3\Rightarrow\lambda=\frac32
+  \end{array}
+  \qquad\Sol(S)=\emptyset
+  \]
+  Luego: $D\notin R$
+\end{enumerate}
+\end{ejemplo}
+
+\subsection{Ecuación implícita de la recta}
+
+Sea $R$ una recta definida por un punto $A$ y un vector director $u\neq\vec0$.
+
+Para determinar si un punto $X=(x_1,x_2,x_3)$ pertenece o no, tenemos que determinar si el sistema es compatible (en $\lambda$)
+\[
+\begin{cases}
+x_1=a_1+\lambda u_1\\
+x_2=a_2+\lambda u_2\\
+x_3=a_3+\lambda u_3
+\end{cases}
+\]
+Con matriz ampliada:
+\[
+\left(\begin{array}{c|c}u_1&x_1-a_1\\u_2&x_2-a_2\\u_3&x_3-a_3\end{array}\right)
+\]
+Se distinguen 3 casos:
+
+\underline{Caso 1}: $u_1,u_2,u_3\neq0$
+\[
+\begin{array}{l}
+\lambda=\dfrac{x_1-a_1}{u_1}\\[10pt]
+\lambda=\dfrac{x_2-a_2}{u_2}\\[10pt]
+\lambda=\dfrac{x_3-a_3}{u_3}
+\end{array}
+\qquad
+\lambda\text{ existe si y sólo si}
+\overbrace{\begin{cases}
+\dfrac{x_1-a_1}{u_1}=\dfrac{x_2-a_2}{u_2}\\[10pt]
+\dfrac{x_1-a_1}{u_1}=\dfrac{x_3-a_3}{u_3}
+\end{cases}}^{\text{Ecuación implícita de } R}
+\]
+Poniendo el sistema anterior en forma lineal, se obtiene:
+\[
+(S)\;\begin{cases}
+\dfrac{1}{u_1}x_1-\dfrac{1}{u_2}x_2=\dfrac{a_1}{u_1}-\dfrac{a_2}{u_2}\\[10pt]
+\dfrac{1}{u_1}x_1-\dfrac{1}{u_3}x_3=\dfrac{a_1}{u_1}-\dfrac{a_3}{u_3}
+\end{cases}
+\qquad
+\begin{array}{l}
+\text{Sistema lineal de 2 ecuaciones}\\
+\text{y 3 incógnitas } (x_1,x_2,x_3)
+\end{array}
+\]
+Por construcción: $\Sol(S)=R$
+
+\underline{Caso 2}: $u_1,u_2\neq0$, pero $u_3=0$
+\[
+\begin{cases}
+x_1=a_1+\lambda u_1\\
+x_2=a_2+\lambda u_2\\
+x_3=a_3+\lambda u_3
+\end{cases}
+\qquad(\text{para algún }\lambda)
+\]
+\[
+\begin{array}{l}
+\lambda=\dfrac{x_1-a_1}{u_1}\\[10pt]
+\lambda=\dfrac{x_2-a_2}{u_2}
+\end{array}
+\qquad
+(S)\;\begin{cases}
+\dfrac{x_1-a_1}{u_1}=\dfrac{x_2-a_2}{u_2}\\[10pt]
+x_3=a_3
+\end{cases}
+\qquad\Sol(S)=R
+\]
+
+\underline{Caso 3}: $u_1\neq0$, pero $u_2=u_3=0$
+\[
+\begin{cases}
+x_1=a_1+\lambda u_1\\
+x_2=a_2\\
+x_3=a_3
+\end{cases}
+\Longrightarrow(S):\begin{cases}x_2=a_2\\x_3=a_3\end{cases}
+\]
+\begin{align*}
+\Sol(S)&=R\\
+&=\{(x_1,a_2,a_3):x_1\in\R\}
+\end{align*}
+
+\begin{proposicion}
+Toda recta tiene una ecuación implícita (o cartesiana)
+\[
+(S)\;\begin{cases}
+a_{11}x_1+a_{12}x_2+a_{13}x_3=b_1\\
+a_{21}x_1+a_{22}x_2+a_{23}x_3=b_2
+\end{cases}
+\]
+
+es decir: un sistema tal que $\Sol(S)=R$
+\end{proposicion}
+
+\begin{ejemplo}[\ref{ej:recta} continuado]
+$A=(1,1,1)$ y $u=(1,2,-3)$
+\[
+\begin{cases}
+x_1=1+\lambda\Rightarrow\lambda=x_1-1\\[4pt]
+x_2=1+2\lambda\Rightarrow\lambda=\dfrac{x_2-1}{2}\\[10pt]
+x_3=1-3\lambda\Rightarrow\lambda=\dfrac{1-x_3}{3}
+\end{cases}
+\qquad
+\begin{cases}
+x_1-1=\dfrac{x_2-1}{2}\\[10pt]
+x_1-1=\dfrac{1-x_3}{3}
+\end{cases}
+\]
+\[
+\begin{cases}
+x_1-\dfrac{x_2}{2}=\dfrac12\\[10pt]
+x_1+\dfrac{x_3}{3}=\dfrac43
+\end{cases}
+\qquad
+\begin{cases}
+2x_1-x_2=1\\
+3x_1+x_3=4
+\end{cases}
+\qquad\Sol(S)=R
+\]
+$C=(0,-1,4)$: $C\in R$
+
+$D=(1,4,-3)\notin R$
+\end{ejemplo}
+
+% =====================================================================
+\clase{14}{}{Planos, norma y producto escalar}
+
+\subsection{Ecuación implícita de la recta}
+
+\begin{observacion}\leavevmode
+\begin{enumerate}[label=(\arabic*)]
+  \item Una ecuación implícita es un sistema lineal de 2 ecuaciones y 3 incógnitas tal que $\Sol(S)=R$. Para deducir una ecuación paramétrica de $R$, basta con resolver el sistema.
+  \item Otro método para deducir una ecuación paramétrica a partir de una ecuación implícita consiste en hallar dos soluciones distintas del sistema. A partir de dichas soluciones (que son 2 puntos distintos de $R$), se construye fácilmente la ecuación paramétrica.
+  \item Una ecuación implícita de una recta $R$ es la misma que una descripción de $R$ como intersección de 2 planos no paralelos.
+\end{enumerate}
+\end{observacion}
+
+\subsection{Ecuación paramétrica del plano}
+
+\begin{definicion}
+Tres puntos $A,B,C\in\R^3$ \underline{no alineados} definen un plano $P$ por la ecuación vectorial:
+\[
+X=A+\lambda\overrightarrow{AB}+\mu\overrightarrow{AC}
+\qquad
+\begin{pmatrix}\text{para algunos}\\\lambda,\mu\in\R\end{pmatrix}
+\]
+\end{definicion}
+
+\begin{observacion}
+Como $A,B,C$ no son alineados, los vectores $\overrightarrow{AB}$ y $\overrightarrow{AC}$ no son colineales.
+\end{observacion}
+
+Ecuación paramétrica:
+\[
+\begin{cases}
+x_1=a_1+\lambda(b_1-a_1)+\mu(c_1-a_1)\\
+x_2=a_2+\lambda(b_2-a_2)+\mu(c_2-a_2)\\
+x_3=a_3+\lambda(b_3-a_3)+\mu(c_3-a_3)
+\end{cases}
+\qquad
+\begin{pmatrix}\text{para algunos}\\\lambda,\mu\in\R\end{pmatrix}
+\]
+
+\begin{definicion}
+Un vector director de un plano $P$ es cualquier vector $u$ $(\neq\vec0)$ de la forma $u=\overrightarrow{AB}$, donde $A,B$ son puntos distintos de $P$.
+\end{definicion}
+
+¡Ojo! Los vectores directores de un plano no son colineales entre sí.
+
+También se puede definir un plano a partir de un punto $A$ y dos vectores $u,v$ \underline{no colineales}:
+\[
+X=A+\lambda u+\mu v
+\qquad
+\begin{pmatrix}\text{para algunos}\\\lambda,\mu\in\R\end{pmatrix}
+\]
+\[
+\begin{cases}
+x_1=a_1+\lambda u_1+\mu v_1\\
+x_2=a_2+\lambda u_2+\mu v_2\\
+x_3=a_3+\lambda u_3+\mu v_3
+\end{cases}
+\]
+
+\begin{definicion}
+Dos planos $P$ y $P'$ son paralelos cuando tienen los mismos vectores directores:
+\[
+\dir(P)=\dir(P')
+\]
+\end{definicion}
+
+Para verificar un plano con vectores directores $u,v\in\dir(P)$ (no colineales) es paralelo a otro plano $P'$, basta con verificar que $u,v\in\dir(P')$.
+
+\begin{observacion}
+Dos planos paralelos que se encuentran en un punto son iguales.
+\end{observacion}
+
+\subsection{Ecuación implícita de un plano}
+
+\begin{proposicion}
+Sea $P$ un plano definido por un punto $A=(a_1,a_2,a_3)$ y dos vectores directores $u=(u_1,u_2,u_3)$ y $v=(v_1,v_2,v_3)$ no colineales. Para todo $X=(x_1,x_2,x_3)$ tenemos las siguientes equivalencias.
+\begin{align*}
+&X\in P\\
+\iff{}&\overrightarrow{AX}\text{ es combinación lineal de } u \text{ y } v\\
+\iff{}&\begin{vmatrix}
+x_1-a_1&u_1&v_1\\
+x_2-a_2&u_2&v_2\\
+x_3-a_3&u_3&v_3
+\end{vmatrix}=0
+\end{align*}
+\end{proposicion}
+
+Gracias a la Prop.\ se deduce que
+\[
+\begin{aligned}
+X\in P\iff{}&(x_1-a_1)(u_2v_3-u_3v_2)\\
+&-(x_2-a_2)(u_1v_3-u_3v_1)\\
+&+(x_3-a_3)(u_1v_2-u_2v_1)=0\\
+\iff{}&\alpha x_1+\beta x_2+\gamma x_3=\delta
+\end{aligned}
+\]
+
+con
+\[
+\begin{aligned}
+\alpha&=(u_2v_3-u_3v_2)\\
+\beta&=(u_3v_1-u_1v_3)\\
+\gamma&=(u_1v_2-u_2v_1)
+\end{aligned}
+\qquad\qquad
+\delta=\det(A,u,v)
+\]
+
+Recíprocamente, toda ecuación de la forma
+\[
+\alpha x_1+\beta x_2+\gamma x_3=\delta
+\]
+donde $(\alpha,\beta,\gamma)\neq(0,0,0)$ define un plano.
+
+\begin{observacion}
+Para deducir la ecuación paramétrica a partir de la implícita basta con resolver el sistema (con 1 ecuación y 3 incógnitas)
+\end{observacion}
+
+\subsection{Norma y producto escalar}
+
+\begin{definicion}
+Se define la norma $\norm{u}$ de un vector $u\in\R^3$ por
+\[
+\norm{u}=\dist(A,B)\quad\text{donde } A,B \text{ son tales que } u=\overrightarrow{AB}
+\]
+\end{definicion}
+
+\begin{proposicion}\leavevmode
+\begin{enumerate}[label=(\arabic*)]
+  \item $\norm{u}\geq0$ y $\norm{u}=0$ si y sólo si $u=\vec0$
+  \item $\norm{\lambda\cdot u}=\abs{\lambda}\cdot\norm{u}$
+  \item $\norm{u+v}\leq\norm{u}+\norm{v}$ \quad desigualdad triangular.
+\end{enumerate}
+\end{proposicion}
+
+\begin{definicion}
+Un versor es un vector de norma 1
+\end{definicion}
+
+\begin{definicion}
+Dados dos vectores $u,v\in\R^3$, se define el \underline{producto escalar} (producto interno) por
+\[
+u\cdot v:=\norm{u}\cdot\norm{v}\cdot\cos\varphi
+\]
+donde $\varphi$ es el ángulo formado por los vectores $u$ y $v$.
+
+Cuando $u$ o $v$ es nulo, \quad $u\cdot v=0$
+\end{definicion}
+
+\begin{notacion}
+$u\cdot v=\langle u,v\rangle=\langle u\,|\,v\rangle$
+\end{notacion}
+
+\subsubsection*{Propiedades del producto escalar}
+
+\begin{enumerate}[label=(\arabic*)]
+  \item $u\cdot v=v\cdot u$
+  \item $(\lambda\cdot u)\cdot v=u\cdot(\lambda\cdot v)=\lambda\cdot(u\cdot v)$
+  \item $(u+u')\cdot v=u\cdot v+u'\cdot v$
+
+  $u\cdot(v+v')=u\cdot v+u\cdot v'$
+\end{enumerate}
+
+% =====================================================================
+\clase{15}{}{Producto escalar y vectorial}
+
+\subsection{Norma y producto escalar}
+
+\begin{definicion}
+La norma de un vector $u$ en $\R^3$ es el número $\norm{u}$ definido por
+\[
+\norm{u}=\dist(A,B),\quad\text{donde } A,B\in\R^3 \text{ tal que } u=\overrightarrow{AB}=B-A
+\]
+\end{definicion}
+
+\begin{observacion}
+La def no depende de $A$ y $B$
+\end{observacion}
+
+\begin{proposicion}\leavevmode
+\begin{enumerate}[label=(\arabic*)]
+  \item $\norm{u}\geq0$ y $\norm{u}=0$ si y sólo si $u=\vec0$
+  \item $\norm{\lambda\cdot u}=\abs{\lambda}\cdot\norm{u}$
+  \item $\norm{u+v}\leq\norm{u}+\norm{v}$
+\end{enumerate}
+\end{proposicion}
+
+\begin{definicion}
+Un versor es un vector $u$ tal que $\norm{u}=1$
+\end{definicion}
+
+Si $u\in\R^3$ es tal que $u\neq\vec0$, entonces el vector $\dfrac{1}{\norm{u}}\cdot u$ es un versor
+
+\begin{definicion}
+El producto escalar de dos vectores $u,v\in\R^3$ es el número $u\cdot v$ $\bigl(\langle u,v\rangle,\ \langle u\,|\,v\rangle\bigr)$ definido por:
+\[
+u\cdot v=\norm{u}\cdot\norm{v}\cdot\cos\varphi,\quad\text{donde }\varphi\text{ es el ángulo entre } u \text{ y } v.
+\]
+Cuando $u$ o $v$ es nulo: \quad $u\cdot v=0$
+\end{definicion}
+
+\begin{center}
+\begin{tikzpicture}[>={Stealth},scale=1.1]
+  % u y v
+  \draw[->,thick] (0,0) -- (2,0) node[midway,below] {$u$};
+  \draw[->,thick] (0,0) -- (2.6,1.8) node[pos=0.8,above left] {$v$};
+  \draw (0.6,0) arc (0:34.7:0.6); \node at (0.85,0.25) {$\varphi$};
+  % proyeccion de v sobre la recta de u
+  \draw[dashed] (-0.5,0) -- (0,0); \draw[dashed] (2,0) -- (3.3,0);
+  \draw[dashed] (2.6,1.8) -- (2.6,-0.9);
+  \draw (2.45,0) -- (2.45,0.15) -- (2.6,0.15);
+  % v'
+  \draw[->] (0,-0.7) -- (2.6,-0.7) node[midway,below] {$v'$};
+  \draw[dashed] (0,0) -- (0,-0.9);
+  % proyeccion de u sobre la recta de v
+  \draw[dashed] (2,0) -- (1.352,0.936);
+  \draw[dashed] (2.6,1.8) -- (3.1,2.15); \draw[dashed] (-0.3,-0.21) -- (0,0);
+  % u'
+  \draw[->] (-0.34,0.49) -- (1.01,1.43) node[midway,above left] {$u'$};
+  \draw[dashed] (0,0) -- (-0.34,0.49);
+  \draw[dashed] (1.352,0.936) -- (1.01,1.43);
+\end{tikzpicture}
+\end{center}
+\begin{align*}
+u\cdot v&=\norm{u}\underbrace{\bigl(\norm{v}\cdot\cos\varphi\bigr)}_{\norm{v'}}=\norm{u}\cdot\norm{v'}\\
+&=\norm{u'}\cdot\norm{v}
+\end{align*}
+
+\begin{proposicion}\leavevmode
+\begin{enumerate}[label=(\arabic*)]
+  \item $u\cdot v=v\cdot u$
+  \item $(\lambda u)\cdot v=u\cdot(\lambda v)=\lambda(u\cdot v)$
+  \item $(u_1+u_2)\cdot v=u_1\cdot v+u_2\cdot v$
+
+  $u\cdot(v_1+v_2)=u\cdot v_1+u\cdot v_2$
+\end{enumerate}
+\end{proposicion}
+
+\begin{definicion}
+Dos vectores $u$ y $v$ son ortogonales cuando $u\cdot v=0$
+\end{definicion}
+
+\subsection{Expresión en una base ortonormal}
+
+El espacio «ambiente» se ha identificado con $\R^3$ a través de un sistema de coordenadas $(O,\vec\imath,\vec\jmath,\vec k)$.
+
+Ahora se supone que el sistema de coordenadas $(O,\vec\imath,\vec\jmath,\vec k)$ es ortonormal, es decir
+\begin{enumerate}[label=(\arabic*)]
+  \item $\norm{\vec\imath}=\norm{\vec\jmath}=\norm{\vec k}=1$ \quad (son versores)
+  \item $\vec\imath\cdot\vec\jmath=\vec\imath\cdot\vec k=\vec\jmath\cdot\vec k=0$ \quad (son ortogonales dos a dos)
+\end{enumerate}
+
+\begin{proposicion}
+En una base ortonormal, para todo $u=(u_1,u_2,u_3)$ y $v=(v_1,v_2,v_3)$, tenemos que:
+\begin{enumerate}[label=(\arabic*)]
+  \item $u\cdot v=u_1v_1+u_2v_2+u_3v_3$
+  \item $\norm{u}=\sqrt{u\cdot u}=\sqrt{u_1^2+u_2^2+u_3^2}$
+\end{enumerate}
+\end{proposicion}
+
+\begin{demo}
+\begin{align*}
+\vec u&=u_1\cdot\vec\imath+u_2\cdot\vec\jmath+u_3\cdot\vec k\\
+\vec v&=v_1\cdot\vec\imath+v_2\cdot\vec\jmath+v_3\cdot\vec k
+\end{align*}
+\begin{align*}
+u\cdot v={}&(u_1\cdot\vec\imath+u_2\cdot\vec\jmath+u_3\cdot\vec k)\cdot(v_1\cdot\vec\imath+v_2\cdot\vec\jmath+v_3\cdot\vec k)\\
+={}&\boxed{u_1v_1(\vec\imath\cdot\vec\imath)}+u_1v_2(\vec\imath\cdot\vec\jmath)+u_1v_3(\vec\imath\cdot\vec k)+{}\\
+&u_2v_1(\vec\jmath\cdot\vec\imath)+\boxed{u_2v_2(\vec\jmath\cdot\vec\jmath)}+u_2v_3(\vec\jmath\cdot\vec k)+{}\\
+&u_3v_1(\vec k\cdot\vec\imath)+u_3v_2(\vec k\cdot\vec\jmath)+\boxed{u_3v_3(\vec k\cdot\vec k)}\\
+={}&u_1v_1+u_2v_2+u_3v_3
+\end{align*}
+\end{demo}
+
+\begin{demo}[Demostración de (2)]
+\begin{align*}
+u\cdot u&=\norm{u}\cdot\norm{u}\cdot\cos0\\
+&=\norm{u}^2
+\end{align*}
+\end{demo}
+
+Moraleja: Cuando se consideran productos escalares, normas, distancias y ángulos, siempre se trabaja en una base ortonormal. En este marco:
+\[
+u\cdot v=u_1v_1+u_2v_2+u_3v_3=\begin{pmatrix}u_1&u_2&u_3\end{pmatrix}\cdot\begin{pmatrix}v_1\\v_2\\v_3\end{pmatrix}
+\]
+A partir del producto escalar, se deducen:
+\begin{itemize}
+  \item[] (normas) \quad $\norm{u}=\sqrt{u\cdot u}=\sqrt{u_1^2+u_2^2+u_3^2}$
+  \item[] (distancias) \quad $AB=\norm{\overrightarrow{AB}}=\norm{B-A}=\sqrt{(b_1-a_1)^2+(b_2-a_2)^2+(b_3-a_3)^2}$
+  \item[] (ángulos) \quad $\cos\varphi=\dfrac{u\cdot v}{\norm{u}\cdot\norm{v}}$ \quad donde $u,v\neq\vec0$, $\varphi$ es el ángulo entre $u$ y $v$
+\end{itemize}
+
+\subsection{Producto vectorial}
+
+\begin{definicion}
+Sea $(\vec\imath,\vec\jmath,\vec k)$ una base (ortonormal)
+\begin{center}
+\begin{tikzpicture}[>={Stealth}]
+  \fill (0,0) circle (1.3pt) node[left] {$\vec 0$};
+  \draw[->] (0,0) -- (0,1.5) node[right] {$\vec k$};
+  \draw[->] (0,0) -- (1.2,-0.5) node[below] {$\vec\jmath$};
+  \draw[->] (0,0) -- (-0.9,-0.7) node[below] {$\vec\imath$};
+  \node[align=center] at (0,-1.6) {sentido antihorario\\positivo};
+  \begin{scope}[xshift=6cm]
+    \draw[->] (0,0) -- (0,1.5) node[right] {$\vec k$};
+    \draw[->] (0,0) -- (1.2,-0.5) node[below] {$\vec\imath$};
+    \draw[->] (0,0) -- (-0.9,-0.7) node[below] {$\vec\jmath$};
+    \node[align=center] at (0,-1.6) {sentido horario\\negativo};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+\end{definicion}
+
+\begin{definicion}
+El producto vectorial de dos vectores $u,v\in\R^3$ es el vector $u\wedge v$ definido por:
+\begin{enumerate}[label=(\arabic*)]
+  \item $\norm{u\wedge v}=\norm{u}\cdot\norm{v}\cdot\sen\varphi$ \quad donde $\varphi$ es el ángulo entre $u$ y $v$
+  \item $(u\wedge v)\cdot u=(u\wedge v)\cdot v=0$
+
+  ($u\wedge v$ es ortogonal a $u$ y a $v$)
+  \item la terna $(u,v,u\wedge v)$ es positiva
+\end{enumerate}
+\end{definicion}
+
+Propiedades:
+\begin{enumerate}[label=(\arabic*)]
+  \item $\norm{u\wedge v}$ es el doble del área del triángulo formado por $u$ y $v$
+  \item $u\wedge v=\vec0$ si y sólo si $u$ y $v$ son colineales
+  \item El producto vectorial es \underline{anticonmutativo}
+  \[
+  u\wedge v=-(v\wedge u)
+  \]
+  \item $(\lambda u)\wedge v=u\wedge(\lambda v)=\lambda(u\wedge v)$
+  \item $(u_1+u_2)\wedge v=(u_1\wedge v)+(u_2\wedge v)$
+
+  $u\wedge(v_1+v_2)=(u\wedge v_1)+(u\wedge v_2)$
+\end{enumerate}
+
+¡Ojo! «$\wedge$» no es asociativa:
+\[
+u\wedge(v\wedge w)\neq(u\wedge v)\wedge w
+\]
+Pero:
+\begin{enumerate}[label=(\arabic*),start=6]
+  \item $(u\wedge v)\wedge w+(v\wedge w)\wedge u+(w\wedge u)\wedge v=\vec0$
+\end{enumerate}
+
+\subsection{Expresión en una base ortonormal positiva}
+
+\begin{proposicion}
+Si $(\vec\imath,\vec\jmath,\vec k)$ es una base ortonormal positiva, entonces para todos $u,v\in\R^3$
+\[
+u\wedge v=\begin{pmatrix}
+u_2v_3-u_3v_2\\
+u_3v_1-u_1v_3\\
+u_1v_2-u_2v_1
+\end{pmatrix}
+\]
+\end{proposicion}
+
+% =====================================================================
+\clase{16}{}{Normal, ángulos y distancias}
+
+\subsection{Aplicaciones a la geometría}
+
+Los productos $u\cdot v$ y $u\wedge w$ permiten calcular distancias y ángulos:
+\begin{align*}
+d(A,B)&=\norm{\overrightarrow{AB}}=\sqrt{\overrightarrow{AB}\cdot\overrightarrow{AB}}\\
+&=\sqrt{(b_1-a_1)^2+(b_2-a_2)^2+(b_3-a_3)^2}
+\end{align*}
+\[
+\cos\varphi=\frac{u\cdot v}{\norm{u}\cdot\norm{v}}
+\]
+\begin{center}
+$\displaystyle\sen\varphi=\frac{\norm{u\wedge v}}{\norm{u}\cdot\norm{v}}$
+\end{center}
+
+\subsection{Normal a un plano}
+
+En lo que sigue, se trabaja en una base ortonormal positiva.
+
+\begin{definicion}
+Un vector $n\neq0$ es normal a un plano $P$ cuando es ortogonal a todo vector director de $P$.
+\end{definicion}
+
+En particular, si $P$ está definido por un punto $A$ y 2 vectores directores $u,v$ no colineales:
+\[
+n\text{ es normal a } P\iff n\cdot u=n\cdot v=0
+\]
+
+\begin{observacion}\leavevmode
+\begin{enumerate}[label=(\arabic*)]
+  \item todos los vectores normales de un plano son colineales entre sí.
+  \item Si $u,v$ son vectores directores no colineales de $P$, entonces el vector $u\wedge v$ es normal a $P$.
+\end{enumerate}
+\end{observacion}
+
+También se puede definir un plano $P$ por un punto y un vector normal $n$:
+
+Para todo $X\in\R^3$, tenemos que
+\begin{align*}
+X\in P&\iff\overrightarrow{AX}\perp n\\
+&\iff\overrightarrow{AX}\cdot n=0\\
+&\iff(x_1-a_1)n_1+(x_2-a_2)n_2+(x_3-a_3)n_3=0\\
+&\iff\alpha x_1+\beta x_2+\gamma x_3+\delta=0
+\end{align*}
+donde $\alpha=n_1$, $\beta=n_2$, $\gamma=n_3$
+\[
+\delta=-A\cdot n
+\]
+
+\underline{Recíprocamente}: Si $P$ tiene ecuación
+\[
+\alpha x_1+\beta x_2+\gamma x_3+\delta=0
+\]
+entonces $n:=(\alpha,\beta,\gamma)$ es un vector normal de $P$
+
+\subsubsection*{Paramétrica \texorpdfstring{$\to$}{->} Implícita}
+
+\[
+X=A+\lambda u+\mu v
+\qquad
+\begin{array}{l}
+(u,v\text{ no colineales})\\
+(\lambda,\mu\in\R)
+\end{array}
+\]
+Sea $n:=u\wedge v=(\alpha,\beta,\gamma)$
+\[
+\alpha x_1+\beta x_2+\gamma x_3+\delta=0
+\]
+donde $\delta=-A\cdot n$
+
+\subsubsection*{Implícita \texorpdfstring{$\to$}{->} Paramétrica}
+
+\[
+P:\ \alpha x_1+\beta x_2+\gamma x_3+\delta=0
+\]
+Sean: \quad $n=(\alpha,\beta,\gamma)$ vector normal
+
+$A$ un punto de $P$ (hallar una solución)
+
+Sea $u:=n\wedge(\text{cualquier vector no colineal a } n)$
+
+\qquad o bien $\vec\imath$, $\vec\jmath$ o $\vec k$
+\[
+v:=n\wedge u
+\]
+\[
+P:\ X=A+\lambda u+\mu v
+\]
+
+\subsection{Ángulos entre rectas y planos}
+
+\[
+\begin{aligned}
+R&:\ X=A+\lambda u\\
+R'&:\ X=A'+\lambda u'
+\end{aligned}
+\]
+\begin{center}
+$\displaystyle\cos\varphi=\frac{u\cdot u'}{\norm{u}\cdot\norm{u'}}$
+\end{center}
+
+\[
+\begin{aligned}
+P&:\ \alpha x_1+\beta x_2+\gamma x_3+\delta=0\\
+P'&:\ \alpha'x_1+\beta'x_2+\gamma'x_3+\delta'=0
+\end{aligned}
+\]
+\[
+\cos\varphi=\frac{n\cdot n'}{\norm{n}\cdot\norm{n'}}
+\qquad
+\begin{aligned}
+\text{donde }n&=(\alpha,\beta,\gamma)\\
+n'&=(\alpha',\beta',\gamma')
+\end{aligned}
+\]
+
+\[
+\begin{aligned}
+R&:\ X=A+\lambda u\\
+P'&:\ \alpha'x_1+\beta'x_2+\gamma'x_3+\delta'=0
+\end{aligned}
+\]
+\[
+\cos\Bigl(\frac{\pi}{2}-\varphi\Bigr)=\frac{u\cdot n'}{\norm{u}\cdot\norm{n'}}
+\]
+
+\subsection{\texorpdfstring{Distancia de un punto $Q$ a un plano $P$}{Distancia de un punto Q a un plano P}}
+
+\[
+\dist(\underset{\mathclap{\substack{\uparrow\\\text{Punto}}}}{Q},\underset{\mathclap{\substack{\uparrow\\\text{Plano}}}}{P})=\min\{\dist(Q,X):X\in P\}
+\]
+
+\begin{itemize}
+  \item $P$ plano definido por un punto $A$ y un vector normal $n$
+  \item $Q$ punto cualquiera
+\end{itemize}
+\[
+\dist(Q,P)=\frac{\abs{\overrightarrow{AQ}\cdot\vec n}}{\norm{\vec n}}
+=\frac{\abs{\alpha q_1+\beta q_2+\gamma q_3+\delta}}{\sqrt{\alpha^2+\beta^2+\gamma^2}}
+\]
+
+% =====================================================================
+\end{document}
